@@ -6,8 +6,9 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\UserController;
 
+Route::get('/', [CustomAuthController::class, 'index'])->name('login');
 Route::namespace('Admin')->prefix('admin')->group(function () {
-    Route::get('/', [CustomAuthController::class, 'index'])->name('login');
+    
     Route::get('login', [CustomAuthController::class, 'index'])->name('login');
     Route::post('custom-login', [CustomAuthController::class, 'customLogin'])->name('login.custom');  
     Route::get('logout', [CustomAuthController::class, 'signOut'])->name('logout');
