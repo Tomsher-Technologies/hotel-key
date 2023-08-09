@@ -256,6 +256,15 @@ class ApiAuthController extends Controller
         return response()->json(['status' => true,'message' => 'Password Changed Successfully', 'data' => []]);
     }
 
+    public function getAllHotels(){
+        try{
+            //return HotelResource::collection(\App\Models\Hotel::all());
+            }catch (\Exception $e ){
+                throw new \Exception("Error in getting all hotels",501,$e);
+                }
+                
+    }
+
 }
 
 
