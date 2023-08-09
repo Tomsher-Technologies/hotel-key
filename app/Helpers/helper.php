@@ -30,7 +30,7 @@ if (! function_exists('convertMdyToYmd')) {
 
 //highlights the selected navigation on admin panel
 if (!function_exists('areActiveRoutes')) {
-    function areActiveRoutes(array $routes, $output = "active")
+    function areActiveRoutes(array $routes, $output = "mm-active")
     {
         foreach ($routes as $route) {
             if (Route::currentRouteName() == $route) return $output;

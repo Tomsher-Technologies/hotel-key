@@ -17,3 +17,23 @@
 .pending{
     padding: 3px 10px 3px !important;
 }
+.logo-size{
+    width: 100px !important;
+    height: 50px !important;
+}
+.main-head{
+    font-size: 1.65rem !important;
+}
+.black{
+    color: black !important;
+}
+.rounded-square{
+    border-radius: 15% !important;
+}
+
+.w-50{
+    width: 50% !important;
+}
+.filter-option-inner-inner{
+    font-size: 13px;
+}

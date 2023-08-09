@@ -34,18 +34,16 @@ class HomeController extends Controller
         // print_r($students);
         // die;
 
-        $total_students = User::where('user_type','student')->count();
-        $approved_students = User::where('user_type','student')->where('is_approved', 1)->count();
-        $rejected_students = User::where('user_type','student')->where('is_approved', 2)->count();
-        return  view('admin.dashboard',compact('total_students','approved_students','rejected_students'));
+        return  view('admin.dashboard');
     }
 
-    public function getAllCourses(){
-        $query = Courses::select('*')
-                    ->where('is_deleted',0)
-                    ->orderBy('id','DESC');
-        $courses = $query->paginate(10);
-        return  view('admin.courses.index',compact('courses'));
+    public function getAllGuests(){
+        // $query = HotelGuests::select('*')
+        //             ->where('is_deleted',0)
+        //             ->orderBy('id','DESC');
+        // $guests = $query->paginate(10);
+        $guests = '';
+        return  view('admin.hotel_guests.index',compact('guests'));
     }
     /**
      * Show the form for creating a new resource.
