@@ -15,6 +15,7 @@ use App\Models\AssignTeachers;
 use App\Models\TeacherSlots;
 use App\Models\Bookings;
 use App\Models\BookingAdditionalUsers;
+use App\Models\HotelBookings;
 use Validator;
 use Hash;
 use Str;
@@ -313,6 +314,34 @@ class ApiAuthController extends Controller
         }else{
             return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
         }  
+    }
+
+    public function getBookingDetails(Request $request){
+        $bookingId = $request->booking_id;
+        
+        $bookingData = HotelBookings::with(['hotel'])->find($bookingId);
+        $booking = [];
+        if(!empty($bookingData)){
+            $hotelData = $bookingData->hotel->user_details ?? '';
+            $booking[] =  array(
+                'booking_id' => $bookingData->id ?? '',
+                'room_number' => $bookingData->room_number ?? '',
+                'checkin_date' => $bookingData->checkin_date ?? '',
+                'checkin_time' => $bookingData->checkin_time ?? '',
+                'checkout_date' => $bookingData->checkout_date ?? '',
+                'checkout_time' => $bookingData->checkout_time ?? '',
+
+                'hotel_name' => $bookingData->hotel->name ?? '',
+                'location' => $hotelData->location ?? '',
+                'phone1' => $hotelData->phone_number ?? '',
+                'phone2' => $hotelData->phone1 ?? '',
+                'banner_image' => (isset($hotelData->banner_image) &&  $hotelData->banner_image != null) ? asset( $hotelData->banner_image) : ''
+            );
+            return response()->json([ 'status' => true, 'message' => 'Success', 'data' => $booking]);
+        }else{
+            return response()->json([ 'status' => false, 'message' => 'Details not found.', 'data' => []]);
+        }  
+        
     }
 
 }
