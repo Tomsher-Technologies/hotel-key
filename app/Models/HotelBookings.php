@@ -9,10 +9,24 @@ class HotelBookings extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'main_user_id', 'room_number', 'checkin_date', 'checkin_time', 'checkout_date', 'checkout_time', 'is_active', 'is_deleted'
+        'hotel_id','main_user_id', 'room_number', 'checkin_date', 'checkin_time', 'checkout_date', 'checkout_time', 'is_active', 'is_deleted'
     ];
 
+    public function hotel(){
+    	return $this->belongsTo(User::class,'hotel_id','id');
+    }
+    
     public function main_user(){
     	return $this->belongsTo(User::class,'main_user_id','id');
     }
+
+    public function additional_users_without_main_user()
+    {
+        return $this->hasMany(BookingAdditionalUsers::class,'booking_id','id')->with(['user'])->where('is_main_user',0);
+    } 
+
+    public function booking_facilities()
+    {
+        return $this->hasMany(BookingFacilities::class,'booking_id','id')->with(['facilities']);
+    } 
 }

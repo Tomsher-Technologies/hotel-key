@@ -31,6 +31,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::post('/update-password', [ApiAuthController::class, 'changePassword'])->name('update-password');
 
     Route::get('/all-hotels', [ApiAuthController::class, 'getAllHotels'])->name('all-hotels'); 
+    Route::get('/user-reservations', [ApiAuthController::class, 'getUserReservationHistory'])->name('user-reservations'); 
 });
 
 
