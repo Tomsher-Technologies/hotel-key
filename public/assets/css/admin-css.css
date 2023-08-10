@@ -37,3 +37,6 @@
 .filter-option-inner-inner{
     font-size: 13px;
 }
+.error{
+    color: red !important;
+}
