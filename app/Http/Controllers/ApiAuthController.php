@@ -359,6 +359,15 @@ class ApiAuthController extends Controller
         }
     }
 
+    public function unreadNotifications(Request $request){
+        $user_id = $request->user_id;
+        $notifications = Notifications::where('user_id', $user_id)
+                                    ->where('is_deleted',0)
+                                    ->where('is_read',0)
+                                    ->count();
+        return response()->json(["status" => true, "message"=>"Success",'data' => $notifications]);
+    }
+
 }
 
 
