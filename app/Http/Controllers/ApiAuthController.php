@@ -16,6 +16,7 @@ use App\Models\TeacherSlots;
 use App\Models\Bookings;
 use App\Models\BookingAdditionalUsers;
 use App\Models\HotelBookings;
+use App\Models\Notifications;
 use Validator;
 use Hash;
 use Str;
@@ -342,6 +343,20 @@ class ApiAuthController extends Controller
             return response()->json([ 'status' => false, 'message' => 'Details not found.', 'data' => []]);
         }  
         
+    }
+
+    public function notifications(Request $request){
+        $user_id = $request->user_id;
+        $notifications = Notifications::where('user_id', $user_id)
+                                    ->where('is_deleted',0)
+                                    ->orderBy('id', 'DESC')
+                                    ->select('id','content','is_read','created_at')->get();
+        if(!empty($notifications[0])){
+            Notifications::where('user_id', $user_id)->update(['is_read' => 1]);
+            return response()->json(["status" => true, "message"=>"Success",'data' => $notifications]);
+        }else{
+            return response()->json(["status" => false,'message'=>'No data found!', 'data' => []]);
+        }
     }
 
 }

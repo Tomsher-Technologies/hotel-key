@@ -23,18 +23,18 @@
                                         @php   $userOptions = '<option value="">Select User</option>'; @endphp
                                         @foreach($users as $user)
                                             @php 
-                                                $userOptions .= '<option value="'. $user->id .'">'.$user->name.'</option>';
+                                                $userOptions .= '<option value="'. $user->id .'">'.$user->name.' ('.$user->email.')</option>';
                                             @endphp
                                         @endforeach
                                         <div class="row">
-                                            <div class="col-xl-7">
+                                            <div class="col-xl-8">
 
                                                 <div class="mb-3 row">
                                                     <label class="col-lg-4 col-form-label" for="validationCustom01">Main User
                                                         <span class="text-danger">*</span>
                                                     </label>
                                                     <div class="col-lg-8">
-                                                        <select class="me-sm-2  form-control wide" style="width:100% !important;" name="main_user"  id="main_user">
+                                                        <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="main_user"  id="main_user">
                                                             {!! $userOptions !!}
                                                         </select>
                                                         @error('main_user')
@@ -69,7 +69,7 @@
                                                     <label class="col-lg-4 col-form-label" for="validationCustom02">Check-In<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control datetime" value="{{ old('check_in') }}"  id="check_in" name="check_in" placeholder="">
+                                                        <input type="text" class="form-control datetime" value="{{ old('check_in') }}"  id="check_in" name="check_in" placeholder="YYYY-MM-DD HH:mm">
                                                         @error('check_in')
                                                             <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
@@ -80,7 +80,7 @@
                                                     <label class="col-lg-4 col-form-label" for="validationCustom02">Check-Out<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
-                                                        <input type="text" class="form-control datetime" value="{{ old('check_out') }}"  id="check_out" name="check_out" placeholder="">
+                                                        <input type="text" class="form-control datetime" value="{{ old('check_out') }}"  id="check_out" name="check_out" placeholder="YYYY-MM-DD HH:mm">
                                                         @error('check_out')
                                                             <div class="alert alert-danger">{{ $message }}</div>
                                                         @enderror
@@ -151,7 +151,8 @@
     });
 
     $('#check_in').bootstrapMaterialDatePicker({
-        weekStart: 0, format: 'YYYY-MM-DD HH:mm', shortTime : true
+        weekStart: 0, format: 'YYYY-MM-DD HH:mm', minDate : new Date()
+        // shortTime : true
     }).on('change', function(e, date) {
         $('#check_out').bootstrapMaterialDatePicker('setMinDate', date);
     });

@@ -17,7 +17,7 @@ use App\Models\HotelFacilities;
 use App\Models\HotelBookings;
 use App\Models\BookingAdditionalUsers;
 use App\Models\BookingFacilities;
-   
+use App\Models\Notifications;
 use Auth;
 use Validator;
 use Storage;
@@ -112,6 +112,11 @@ class HomeController extends Controller
             'is_main_user' => 1,
             'created_at' => date('Y-m-d H:i:s')
         );
+        $notifications[] = array(
+            "user_id" => $request->main_user,
+            "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+            'created_at' => date('Y-m-d H:i:s')
+        );
 
         if(!empty($request->additional_users)){
             foreach($request->additional_users as $users){
@@ -121,10 +126,16 @@ class HomeController extends Controller
                     'is_main_user' => 0,
                     'created_at' => date('Y-m-d H:i:s')
                 );
+
+                $notifications[] = array(
+                    "user_id" => $users,
+                    "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+                    'created_at' => date('Y-m-d H:i:s')
+                );
             }
         }
         BookingAdditionalUsers::insert($userData);
-
+        Notifications::insert($notifications);
         if(!empty($request->facilities)){
             $facData = [];
             foreach($request->facilities as $fac){
@@ -136,8 +147,7 @@ class HomeController extends Controller
             }
             BookingFacilities::insert($facData);
         }
-        					
-
+        
         flash('Booking has been created successfully')->success();
         return redirect()->route('all-bookings');
     }
