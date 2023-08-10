@@ -14,6 +14,7 @@ use App\Models\StudentPackages;
 use App\Models\AssignTeachers;
 use App\Models\TeacherSlots;
 use App\Models\Bookings;
+use App\Models\BookingAdditionalUsers;
 use Validator;
 use Hash;
 use Str;
@@ -277,6 +278,38 @@ class ApiAuthController extends Controller
                 );
             }
             return response()->json([ 'status' => true, 'message' => 'Success', 'data' => $hotel]);
+        }else{
+            return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
+        }  
+    }
+
+    public function getUserReservationHistory(Request $request){
+        $user_id = $request->user_id;
+        // get all reservations of user
+        $query = BookingAdditionalUsers::with(['hotel_booking'])->where('user_id', $user_id);
+        $query->whereHas('hotel_booking', function ($query) {
+            $query->where('is_deleted', 0);
+        });
+        $hotels = $query->orderBy('booking_id','desc')->get();
+        if(isset($hotels[0])){
+            $bookings = [];
+            foreach($hotels as $hot){
+                $hotelBooking = $hot->hotel_booking;
+                $hotelDetails = $hotelBooking->hotel->user_details;
+                $bookings[] = array(
+                    'booking_id' => $hotelBooking->id ?? '',
+                    'room_number' => $hotelBooking->room_number ?? '',
+                    'checkin_date' => $hotelBooking->checkin_date ?? '',
+                    'checkin_time' => $hotelBooking->checkin_time ?? '',
+                    'checkout_date' => $hotelBooking->checkout_date ?? '',
+                    'checkout_time' => $hotelBooking->checkout_time ?? '',
+
+                    'hotel_name' => $hotelBooking->hotel->name ?? '',
+                    'location' => $hotelDetails->location ?? '',
+                    'banner_image' => (isset($hotelDetails->banner_image) &&  $hotelDetails->banner_image != null) ? asset( $hotelDetails->banner_image) : ''
+                );
+            }
+            return response()->json([ 'status' => true, 'message' => 'Success', 'data' => $bookings]);
         }else{
             return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
         }  

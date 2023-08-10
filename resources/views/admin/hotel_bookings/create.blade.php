@@ -151,7 +151,7 @@
     });
 
     $('#check_in').bootstrapMaterialDatePicker({
-        weekStart: 0, format: 'YYYY-MM-DD HH:mm', shortTime : true,minDate : new Date()
+        weekStart: 0, format: 'YYYY-MM-DD HH:mm', shortTime : true
     }).on('change', function(e, date) {
         $('#check_out').bootstrapMaterialDatePicker('setMinDate', date);
     });

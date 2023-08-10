@@ -39,12 +39,14 @@ class HomeController extends Controller
     }
 
     public function getAllGuests(){
-        // $query = HotelGuests::select('*')
-        //             ->where('is_deleted',0)
-        //             ->orderBy('id','DESC');
-        // $guests = $query->paginate(10);
-        $guests = '';
-        return  view('admin.hotel_bookings.index',compact('guests'));
+        $query = HotelBookings::with(['main_user','additional_users_without_main_user','booking_facilities'])
+                            ->select('*')
+                            ->where('hotel_id', Auth::user()->id)
+                            ->where('is_deleted',0)
+                            ->orderBy('id','DESC');
+        $bookings = $query->paginate(10);
+        
+        return  view('admin.hotel_bookings.index',compact('bookings'));
     }
     /**
      * Show the form for creating a new resource.
@@ -94,6 +96,7 @@ class HomeController extends Controller
         $checkoutTime = isset($checkout[1]) ? $checkout[1] : '';
 
         $book = new HotelBookings();
+        $book->hotel_id = Auth::user()->id;
         $book->main_user_id = $request->main_user;
         $book->room_number = $request->room_number;
         $book->checkin_date = $checkinDate;
@@ -103,31 +106,40 @@ class HomeController extends Controller
         $book->save();
         $bookId = $book->id;
 
+        $userData[] = array(
+            'booking_id' => $bookId,
+            'user_id' => $request->main_user,
+            'is_main_user' => 1,
+            'created_at' => date('Y-m-d H:i:s')
+        );
+
         if(!empty($request->additional_users)){
-            $userData = [];
             foreach($request->additional_users as $users){
                 $userData[] = array(
                     'booking_id' => $bookId,
-                    'user_id' => $users
+                    'user_id' => $users,
+                    'is_main_user' => 0,
+                    'created_at' => date('Y-m-d H:i:s')
                 );
             }
-            BookingAdditionalUsers::insert($userData);
         }
+        BookingAdditionalUsers::insert($userData);
 
         if(!empty($request->facilities)){
             $facData = [];
             foreach($request->facilities as $fac){
                 $facData[] = array(
                     'booking_id' => $bookId,
-                    'facility_id' => $fac
+                    'facility_id' => $fac,
+                    'created_at' => date('Y-m-d H:i:s')
                 );
             }
             BookingFacilities::insert($facData);
         }
         					
 
-        flash('Course has been created successfully')->success();
-        return redirect()->route('all-courses');
+        flash('Booking has been created successfully')->success();
+        return redirect()->route('all-bookings');
     }
 
     /**
