@@ -33,6 +33,7 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::get('/all-hotels', [ApiAuthController::class, 'getAllHotels'])->name('all-hotels'); 
     Route::get('/user-reservations', [ApiAuthController::class, 'getUserReservationHistory'])->name('user-reservations'); 
     Route::get('/booking-details', [ApiAuthController::class, 'getBookingDetails'])->name('booking-details'); 
+    Route::get('/notifications', [ApiAuthController::class, 'notifications'])->name('notifications');
 });
 
 
