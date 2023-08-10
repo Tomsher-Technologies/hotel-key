@@ -257,12 +257,29 @@ class ApiAuthController extends Controller
     }
 
     public function getAllHotels(){
-        try{
-            //return HotelResource::collection(\App\Models\Hotel::all());
-            }catch (\Exception $e ){
-                throw new \Exception("Error in getting all hotels",501,$e);
-                }
-                
+        $hotels = User::with('user_details')->select('*')
+                    ->where('user_type','hotel')
+                    ->where('is_active',1)
+                    ->where('is_deleted',0)
+                    ->orderBy('name','ASC')->get()->toArray();
+        if(isset($hotels[0])){
+            $hotel = [];
+            foreach($hotels as $hot){
+                $hotel[] = array(
+                    "id" =>$hot["id"],
+                    "name"=>$hot["name"],
+                    "email"=> $hot["email"],
+                    "phone_number1"=>$hot["user_details"]["phone_number"]?? "",
+                    "phone_number2"=>$hot["user_details"]["phone1"]?? "",
+                    "location"=>$hot["user_details"]["location"]?? "",
+                    "profile_image"=> ($hot['user_details']['profile_image'] != '') ? asset($hot['user_details']['profile_image']) : '',
+                    "banner_image"=> ($hot['user_details']['banner_image'] != '') ? asset($hot['user_details']['banner_image']) : '',
+                );
+            }
+            return response()->json([ 'status' => true, 'message' => 'Success', 'data' => $hotel]);
+        }else{
+            return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
+        }  
     }
 
 }

@@ -53,15 +53,14 @@
                                                     <td>
                                                         @if($hot->user_details->banner_image != '')
                                                         <img class="rounded-square" width="100" src="{{ asset($hot->user_details->banner_image) }}" alt="">
-                                                        @else
-
+                                                        
                                                         @endif
                                                     </td>
                                                     <td>
                                                         {{ $hot->user_details->location }}
                                                     </td>
                                                     <td>{{ $hot->email }}	</td>
-                                                    <td>{{ $hot->user_details->phone_number }}</td>
+                                                    <td>{{ $hot->user_details->phone_number }} <br>{{ $hot->user_details->phone1 }}</td>
                                                     <td>
                                                         @if($hot->is_active == 1)
                                                             <div class="d-flex align-items-center">

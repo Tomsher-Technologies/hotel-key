@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserDetails extends Model
+class BookingAdditionalUsers extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id', 'first_name', 'last_name', 'profile_id', 'gender', 'date_of_birth', 'phone_number','phone1', 
-        'profile_image', 'language'
+        'booking_id', 'user_id'
     ];
+
+    public function hotel_booking(){
+    	return $this->belongsTo(HotelBookings::class,'booking_id','id');
+    }
 
     public function user(){
     	return $this->belongsTo(User::class,'user_id','id');
     }
+
 }

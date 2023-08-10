@@ -67,4 +67,20 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(UserDetails::class);
     }  
+
+    public function hotel_facilities()
+    {
+        return $this->hasMany(HotelFacilities::class,'hotel_id','id');
+    } 
+
+    public function hotel_bookings()
+    {
+        return $this->hasMany(HotelBookings::class,'main_user_id','id');
+    } 
+
+    public function booking_additional_users()
+    {
+        return $this->hasMany(BookingAdditionalUsers::class,'user_id','id');
+    } 
+
 }

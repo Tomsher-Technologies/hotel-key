@@ -78,6 +78,13 @@
                                                 </div>
 
                                                 <div class="mb-3 row">
+                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Phone Number 2 (Optional) </label>
+                                                    <div class="col-lg-8">
+                                                        <input type="text" class="form-control" value="{{ old('phone_number2',$hotel->user_details->phone1) }}" id="phone_number2" name="phone_number2" placeholder="Enter phone number">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
                                                     <label class="col-lg-4 col-form-label" for="validationCustom02">Logo </label>
                                                     <div class="col-lg-8">
                                                         <input type="file" class="form-control" value="" id="logo" name="logo" >

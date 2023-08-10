@@ -13,6 +13,11 @@ use App\Models\PackageModules;
 use App\Models\CourseClasses;
 use App\Models\TeacherDivisions;
 use App\Models\States;
+use App\Models\HotelFacilities;
+use App\Models\HotelBookings;
+use App\Models\BookingAdditionalUsers;
+use App\Models\BookingFacilities;
+   
 use Auth;
 use Validator;
 use Storage;
@@ -29,11 +34,7 @@ class HomeController extends Controller
     }
 
     public function index(){
-        // $students = User::where('user_type','student')->withCount(['approved', 'rejected'])->get();
-        // echo '<pre>';
-        // print_r($students);
-        // die;
-
+       
         return  view('admin.dashboard');
     }
 
@@ -43,60 +44,88 @@ class HomeController extends Controller
         //             ->orderBy('id','DESC');
         // $guests = $query->paginate(10);
         $guests = '';
-        return  view('admin.hotel_guests.index',compact('guests'));
+        return  view('admin.hotel_bookings.index',compact('guests'));
     }
     /**
      * Show the form for creating a new resource.
      */
-    public function createCourse()
+    public function createBooking()
     {
-        return view('admin.courses.create');
+        $users = User::select('*')
+                        ->where('user_type','user')
+                        ->where('is_deleted',0)
+                        ->where('is_active',1)
+                        ->orderBy('name','ASC')->get();
+        $facilities = HotelFacilities::where('hotel_id', Auth::user()->id)
+                        ->where('is_deleted', 0)
+                        ->where('is_active', 1)
+                        ->orderBy('facility_name','ASC')
+                        ->get();
+        return view('admin.hotel_bookings.create',compact('users','facilities'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function storeCourse(Request $request)
+    public function storeBooking(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'description' => 'required',
-            'banner_image' => 'required'
+            'main_user' => 'required',
+            'room_number' => 'required',
+            'check_in' => 'required',
+            'check_out' => 'required'
         ]);
         
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+        // echo '<pre>';
+        // print_r($request->all());
+        // die;
 
-        if ($request->hasFile('banner_image')) {
-            $uploadedFile = $request->file('banner_image');
-            $filename =    strtolower(Str::random(2)).time().'.'. $uploadedFile->getClientOriginalName();
-            $name = Storage::disk('public')->putFileAs(
-                'courses',
-                $uploadedFile,
-                $filename
-            );
-           $imageUrl = Storage::url($name);
-        }   
+        $checkinDate = $checkinTime = $checkoutDate = $checkoutTime =  '';
 
-        $course = Courses::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'banner_image' => $imageUrl
-        ]);
+        $checkin = explode(' ', $request->check_in);
+        $checkinDate = isset($checkin[0]) ? date('Y-m-d' , strtotime($checkin[0])) : '';
+        $checkinTime = isset($checkin[1]) ? $checkin[1] : '';
 
-        if ($request->divisions) {
-            foreach ($request->divisions as $div) {
-                if(isset($div['division_name']) && $div['division_name'] != ''){
-                    CourseDivisions::create([
-                        'courses_id' => $course->id,
-                        'title' =>  $div['division_name'],
-                        'description' =>  isset($div['division_description']) ? $div['division_description'] : NULL,
-                        'is_active' => isset($div['division_status']) ? $div['division_status'] : 1,
-                    ]);
-                }
+        $checkout = explode(' ', $request->check_out);
+        $checkoutDate = isset($checkout[0]) ? date('Y-m-d' , strtotime($checkout[0])) : '';
+        $checkoutTime = isset($checkout[1]) ? $checkout[1] : '';
+
+        $book = new HotelBookings();
+        $book->main_user_id = $request->main_user;
+        $book->room_number = $request->room_number;
+        $book->checkin_date = $checkinDate;
+        $book->checkin_time = $checkinTime;
+        $book->checkout_date = $checkoutDate;
+        $book->checkout_time = $checkoutTime;
+        $book->save();
+        $bookId = $book->id;
+
+        if(!empty($request->additional_users)){
+            $userData = [];
+            foreach($request->additional_users as $users){
+                $userData[] = array(
+                    'booking_id' => $bookId,
+                    'user_id' => $users
+                );
             }
+            BookingAdditionalUsers::insert($userData);
         }
+
+        if(!empty($request->facilities)){
+            $facData = [];
+            foreach($request->facilities as $fac){
+                $facData[] = array(
+                    'booking_id' => $bookId,
+                    'facility_id' => $fac
+                );
+            }
+            BookingFacilities::insert($facData);
+        }
+        					
+
         flash('Course has been created successfully')->success();
         return redirect()->route('all-courses');
     }
@@ -182,6 +211,38 @@ class HomeController extends Controller
         Courses::where('id', $request->id)->update(['is_deleted' => 1]);
     }
 
-    
+    public function getAllFacilities(){
+        $facilities = HotelFacilities::where('hotel_id', Auth::user()->id)
+                                    ->where('is_deleted', 0)
+                                    ->orderBy('id','DESC')
+                                    ->paginate(15);
+        return  view('admin.facilities.index',compact('facilities'));
+    }
+
+    public function storeFacility(Request $request){
+        $id = $request->id;
+        $facility = $request->facility;
+        $status = $request->status;
+        $facId = '';
+        if($id != ''){
+            $fac = HotelFacilities::find($id);
+            $fac->facility_name = $facility;
+            $fac->is_active    =$status ;
+            $fac->save();
+            $facId = $fac->id;
+        }else{
+            $fac = new HotelFacilities();
+            $fac->hotel_id = Auth::user()->id;
+            $fac->facility_name = $facility;
+            $fac->is_active    =$status ;
+            $fac->save();
+            $facId = $fac->id;
+        }
+        return $facId;
+    }
+
+    public function deleteFacility(Request $request){
+        HotelFacilities::where('id', $request->id)->update(['is_deleted' => 1]);
+    }
    
 }

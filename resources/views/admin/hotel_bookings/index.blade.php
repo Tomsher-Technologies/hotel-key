@@ -13,9 +13,9 @@
                         <div class="card dz-card" id="bootstrap-table2">
                             <div class="card-header flex-wrap d-flex justify-content-between">
                                 <div>
-                                    <h3 class="card-title main-head">All Guests</h3>
+                                    <h3 class="card-title main-head">All Bookings</h3>
                                 </div>
-                                <a href="{{ route('add-guest') }}" class="btn btn-primary">Add New Guest</a>
+                                <a href="{{ route('add-booking') }}" class="btn btn-primary">Add New Booking</a>
                             </div>
 							 <div class="card-body">
                                 <div class="table-responsive">

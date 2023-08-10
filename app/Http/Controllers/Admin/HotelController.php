@@ -118,6 +118,7 @@ class HotelController extends Controller
             $uDetails->first_name = $request->name;
             $uDetails->location = $request->location;
             $uDetails->phone_number = $request->phone_number;
+            $uDetails->phone1 = $request->phone_number2;
             $uDetails->profile_image = $logo;
             $uDetails->banner_image = $bannerImage;
             $uDetails->save();
@@ -196,6 +197,7 @@ class HotelController extends Controller
             'first_name' => $request->name,
             'location' => $request->location,
             'phone_number' => $request->phone_number,
+            'phone1' => $request->phone_number2,
             'profile_image' => ($logo != '') ? $logo : $presentLogo,
             'banner_image' => ($imageUrlB != '') ? $imageUrlB : $presentBannerImage,
         ];
