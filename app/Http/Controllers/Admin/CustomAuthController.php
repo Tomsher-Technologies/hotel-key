@@ -44,7 +44,7 @@ class CustomAuthController extends Controller
    
         $credentials = array('email' => $request->email, 'password' => $request->password);
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->user_type != "user"){
+            if(Auth::user()->user_type != "user" && Auth::user()->is_active == 1 && Auth::user()->is_deleted == 0){
                 return redirect()->route('admin.dashboard');
             }else{
                 auth()->guard()->logout();

@@ -40,3 +40,31 @@
 .error{
     color: red !important;
 }
+.margin-auto{
+    margin: auto !important;
+}
+.search-section{
+    border: 1px solid #80808054 !important;
+    border-radius: 15px !important;
+    padding: 15px !important;
+}
+
+.select2-selection{
+    background: #fff !important;
+    color: #333333 !important;
+    line-height: 1.5 !important;
+    font-size: 13px !important;
+    height: 2.813rem !important;
+    border-radius: 0.625rem !important;
+    border-color: #cdcdcd !important;
+}
+
+.select2-selection__arrow{
+    margin-top: 2% !important;
+}
+.select2-selection__rendered{
+    margin-top: 2% !important;
+}
+.white-back{
+    background-color: white !important;
+}

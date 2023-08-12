@@ -1,7 +1,8 @@
 <div class="deznav">
     <div class="deznav-scroll mm-active">
         <ul class="metismenu mm-show" id="menu">
-            <li class="{{ areActiveRoutes(['admin.dashboard']) }}"><a class="" href="{{ route('admin.dashboard') }}" aria-expanded="false">
+            <li class="{{ areActiveRoutes(['admin.dashboard']) }}">
+                <a class="" href="{{ route('admin.dashboard') }}" aria-expanded="false">
                     <div class="menu-icon">
                         <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -53,34 +54,7 @@
                     </a>
                 </li>
 
-                <li><a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-                        <div class="menu-icon">
-                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.007 16.2236H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M16.007 12.0371H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M11.5421 7.86035H8.78711" stroke="#252525" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M16.1994 2.75C16.1994 2.75 8.52238 2.754 8.51038 2.754C5.75038 2.771 4.04138 4.587 4.04138 7.357V16.553C4.04138 19.337 5.76338 21.16 8.54738 21.16C8.54738 21.16 16.2234 21.157 16.2364 21.157C18.9964 21.14 20.7064 19.323 20.7064 16.553V7.357C20.7064 4.573 18.9834 2.75 16.1994 2.75Z"
-                                    stroke="#252525" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                            </svg>
-                        </div>
-                        <span class="nav-text">Hotel Profile</span>
-                    </a>
-                    <ul aria-expanded="false" class="mm-collapse" style="">
-                        <li class="mini-dashboard">Profile</li>
-                        <li><a href="profile.html">View Profile</a></li>
-                        <li><a href="edit_profile.html">Edit Profile</a></li>
-                        <li><a href="">Change Password</a></li>
-                    </ul>
-                </li>
-            @endif
-
-            @if(Auth::user()->user_type == 'admin')
-                <li class="{{ areActiveRoutes(['all-hotels','add-hotel','edit-hotel']) }}">
+                <li class="{{ areActiveRoutes(['profile','update-profile']) }}">
                     <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
                         <div class="menu-icon">
                             <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,6 +69,44 @@
                                     stroke="#252525" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 </path>
                             </svg>
+                        </div>
+                        <span class="nav-text">My Profile</span>
+                    </a>
+                    <ul aria-expanded="false" class="mm-collapse" style="">
+                        <li class="mini-dashboard">Profile</li>
+                        <li><a href="{{ route('profile') }}">View Profile</a></li>
+                        <li><a href="{{ route('update-profile') }}">Edit Profile</a></li>
+                        <li><a href="{{ route('change-password') }}">Change Password</a></li>
+                    </ul>
+                </li>
+            @endif
+
+            @if(Auth::user()->user_type == 'admin')
+
+                <li class="{{ areActiveRoutes(['bookings']) }}">
+                    <a class="" href="{{ route('bookings') }}" aria-expanded="false">
+                        <div class="menu-icon">
+                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.007 16.2236H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path d="M16.007 12.0371H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                                <path d="M11.5421 7.86035H8.78711" stroke="#252525" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M16.1994 2.75C16.1994 2.75 8.52238 2.754 8.51038 2.754C5.75038 2.771 4.04138 4.587 4.04138 7.357V16.553C4.04138 19.337 5.76338 21.16 8.54738 21.16C8.54738 21.16 16.2234 21.157 16.2364 21.157C18.9964 21.14 20.7064 19.323 20.7064 16.553V7.357C20.7064 4.573 18.9834 2.75 16.1994 2.75Z"
+                                    stroke="#252525" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="nav-text">Bookings</span>
+                    </a>
+                </li>
+
+                <li class="{{ areActiveRoutes(['all-hotels','add-hotel','edit-hotel']) }}">
+                    <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+                        <div class="menu-icon">
+                            <svg style="color: white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox=" -2 0 22 20"fill="currentColor" class="bi bi-building"> <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z" fill="white"></path> <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z" fill="white"></path> </svg>
                         </div>
                         <span class="nav-text">Hotels</span>
                     </a>
@@ -108,18 +120,7 @@
                 <li class="{{ areActiveRoutes(['all-users','add-user','edit-user']) }}">
                     <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
                         <div class="menu-icon">
-                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16.007 16.2236H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M16.007 12.0371H8.78699" stroke="#252525" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round"></path>
-                                <path d="M11.5421 7.86035H8.78711" stroke="#252525" stroke-width="1.5"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M16.1994 2.75C16.1994 2.75 8.52238 2.754 8.51038 2.754C5.75038 2.771 4.04138 4.587 4.04138 7.357V16.553C4.04138 19.337 5.76338 21.16 8.54738 21.16C8.54738 21.16 16.2234 21.157 16.2364 21.157C18.9964 21.14 20.7064 19.323 20.7064 16.553V7.357C20.7064 4.573 18.9834 2.75 16.1994 2.75Z"
-                                    stroke="#252525" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                            </svg>
+                            <svg style="color: white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="white"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="white"></path><path d="M16 3.13a4 4 0 0 1 0 7.75" fill="white"></path></svg>
                         </div>
                         <span class="nav-text">Users</span>
                     </a>

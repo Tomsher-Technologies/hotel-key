@@ -15,17 +15,30 @@
                                 <div>
                                     <h3 class="card-title main-head">All Bookings</h3>
                                 </div>
-                                <a href="{{ route('add-booking') }}" class="btn btn-primary">Add New Booking</a>
+
                             </div>
 							 <div class="card-body">
                                 
                                 <form  action="" method="GET">
                                     <div class="row search-section">
-                                        <div class="mb-3 col-sm-6">
-                                            <label class="form-label">User Name/Profile ID/Email/Room Number</label>
-                                            <input type="text" class="form-control" value="{{ $search_term }}" id="search_term" name="search_term"
-                                            placeholder="Search with User Name or Profile ID or Email or Room Number" autocomplete="off">
-                                            
+                                        <div class="mb-3 col-sm-3">
+                                            <label class="form-label">Hotel</label>
+                                            <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="hotel"  id="hotel">
+                                                <option value=""> Select </option>
+                                                @foreach($hotels as $hote)
+                                                    <option {{ ($hotel_search == $hote->id) ? 'selected' : '' }} value="{{$hote->id}}">{{$hote->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3 col-sm-3">
+                                            <label class="form-label">User</label>
+                                            <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="user"  id="user">
+                                                <option value=""> Select </option>
+                                                @foreach($users as $user)
+                                                    <option {{ ($user_search == $user->id) ? 'selected' : '' }} value="{{$user->id}}">{{$user->name}}  ({{$user->email}})</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-3 col-sm-2">
                                             <label class="form-label">Check-In Date</label>
@@ -39,7 +52,7 @@
                                         </div>
                                         <div class="mb-3 col-sm-2 margin-auto">
                                             <button class="btn btn-primary light" type="submit">Search</button>
-                                            <a href="{{ route('all-bookings') }}" class="btn btn-danger light" type="button">Reset</a>
+                                            <a href="{{ route('bookings') }}" class="btn btn-danger light" type="button">Reset</a>
                                         </div>
                                     
                                     </div>
@@ -51,13 +64,13 @@
                                         <thead>
                                         <tr>
                                                 <th class="text-center"><strong>Sl No.</strong></th>
+                                                <th><strong>Hotel Name</strong></th>
                                                 <th><strong>Master User</strong></th>
                                                 <th class="text-center"><strong>Room Number</strong></th>
                                                 <th class="text-center"><strong>Check-In</strong></th>
                                                 <th class="text-center"><strong>Check-Out</strong></th>
                                                 <th><strong>Additional Users</strong></th>
                                                 <th><strong>Additional Facilities</strong></th>
-                                                <th><strong>Action</strong></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -65,6 +78,7 @@
                                                 @foreach($bookings as $key => $book)
                                                     <tr>
                                                         <td class="text-center">{{ $key + 1 + ($bookings->currentPage() - 1) * $bookings->perPage() }}</td>
+                                                        <td><strong>{{ $book->hotel->name ?? '' }}</strong></td>
                                                         <td><strong>{{ $book->main_user->name ?? '' }}</strong></td>
                                                         <td class="text-center">
                                                             {{ $book->room_number }}
@@ -89,18 +103,12 @@
                                                                 </ul>
                                                             @endif
                                                         </td>
-                                                        
-                                                        <td>
-                                                            <div class="d-flex">
-                                                                <a href="{{ route('edit-booking',['id'=>$book->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1"><i class="fa fa-pencil"></i></a>
-                                                                <a href="#" class="btn btn-danger shadow btn-xs sharp deleteHotelBooking"  data-id="{{$book->id}}" title="Delete Booking"><i class="fa fa-trash"></i></a>
-                                                            </div>
-                                                        </td>
+                                                       
                                                     </tr>
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="9" class="text-center">No data found.</td>
+                                                    <td colspan="8" class="text-center">No data found.</td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -123,11 +131,19 @@
 @section('header')
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-material-datetimepicker.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
 @endsection
 
 @section('footer')
 <script src="{{ asset('assets/js/bootstrap-material-datetimepicker.js') }}"></script>
+<script src="{{ asset('assets/js/select2.min.js') }}"></script>
 <script type="text/javascript">
+     $('#hotel').select2({
+        'placeholder':'Select'
+    });
+    $('#user').select2({
+        'placeholder':'Select'
+    });
      $('#checkin').bootstrapMaterialDatePicker({
         weekStart: 0,
         time: false,
@@ -138,39 +154,6 @@
         time: false,
         clearButton: true
     });
- $(document).on('click','.deleteHotelBooking',function(){
-        var id = $(this).attr('data-id');
-        swal({ 
-            title: "Are you sure to delete ?", 
-            text: "", 
-            type: "warning", 
-            showCancelButton: !0, 
-            confirmButtonColor: "#DD6B55", 
-            confirmButtonText: "Yes, delete it !!", 
-            cancelButtonText: "No, cancel it !!", 
-        }).then(function(result){
-            console.log(result);
-            if(result.value){
-                $.ajax({
-                    url: "{{ route('booking.delete') }}",
-                    type: "POST",
-                    data: {
-                        id: id,
-                        _token:'{{ @csrf_token() }}',
-                    },
-                    dataType: "html",
-                    success: function () {
-                        swal.fire("Done!", "Succesfully deleted!", "success");
-                        setTimeout(function () { 
-                            window.location.reload();
-                        }, 3000);  
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error deleting!", "Please try again", "error");
-                    }
-                });
-            }
-        })
-    }) ;
+   
 </script>
 @endsection

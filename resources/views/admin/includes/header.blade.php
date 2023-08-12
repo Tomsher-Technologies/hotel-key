@@ -20,9 +20,11 @@
                 </defs>
                 </svg>
                 
-            <img class="brand-title" src="{{ asset('assets/images/no_users.svg') }}" alt="">
-                            
-                    
+                @if(Auth::user()->user_details->profile_image != null)
+                    <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg white-back" alt="">
+                @else
+                    <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg white-back" alt="">
+                @endif
     
         </a>
         <div class="nav-control">
@@ -65,7 +67,11 @@
                                 <a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="header-info2 d-flex align-items-center">
                                         <div class="header-media">
-                                            <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg" alt="">
+                                            @if(Auth::user()->user_details->profile_image != null)
+                                                <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg" alt="">
+                                            @else
+                                                <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg" alt="">
+                                            @endif
                                         </div>
                                         <div class="header-info">
                                             <h6>{{ Auth::user()->name }}</h6>
@@ -77,7 +83,11 @@
                                 <div class=" profile-box">
                                     <div class="products">
                                         <div class="border-img">
-                                            <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar " alt="">
+                                            @if(Auth::user()->user_details->profile_image != null)
+                                                <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg" alt="">
+                                            @else
+                                                <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg" alt="">
+                                            @endif
                                         </div>	
                                         <div class="ms-3">
                                             <h6 class="mb-0">{{ Auth::user()->name }}</h6>

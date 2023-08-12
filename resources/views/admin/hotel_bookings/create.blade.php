@@ -30,7 +30,7 @@
                                             <div class="col-xl-8">
 
                                                 <div class="mb-3 row">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom01">Main User
+                                                    <label class="col-lg-4 col-form-label" for="validationCustom01">Master User
                                                         <span class="text-danger">*</span>
                                                     </label>
                                                     <div class="col-lg-8">
@@ -150,8 +150,12 @@
         weekStart: 0, format: 'YYYY-MM-DD HH:mm'
     });
 
+    var oldDate = new Date();
+    var hour = oldDate.getHours();
+    var newDate = oldDate.setHours(hour - 1);
+
     $('#check_in').bootstrapMaterialDatePicker({
-        weekStart: 0, format: 'YYYY-MM-DD HH:mm', minDate : new Date()
+        weekStart: 0, format: 'YYYY-MM-DD HH:mm', minDate : new Date(newDate)
         // shortTime : true
     }).on('change', function(e, date) {
         $('#check_out').bootstrapMaterialDatePicker('setMinDate', date);

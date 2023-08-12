@@ -25,6 +25,11 @@ class HotelBookings extends Model
         return $this->hasMany(BookingAdditionalUsers::class,'booking_id','id')->with(['user'])->where('is_main_user',0);
     } 
 
+    public function all_additional_users()
+    {
+        return $this->hasMany(BookingAdditionalUsers::class,'booking_id','id')->with(['user']);
+    } 
+
     public function booking_facilities()
     {
         return $this->hasMany(BookingFacilities::class,'booking_id','id')->with(['facilities']);
