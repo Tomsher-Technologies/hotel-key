@@ -75,7 +75,7 @@
                                                             @if(isset($book->additional_users_without_main_user[0]))
                                                                 <ul class="list-icons">
                                                                 @foreach($book->additional_users_without_main_user as $adUser)
-                                                                    <li><i class="fa fa-caret-right text-black-50"></i> {{ $adUser->user->name ?? '' }}</li>
+                                                                    <li><i class="fa fa-caret-right text-black"></i> {{ $adUser->user->name ?? '' }}</li>
                                                                 @endforeach
                                                                 </ul>
                                                             @endif
@@ -84,7 +84,7 @@
                                                             @if(isset($book->booking_facilities[0]))
                                                                 <ul class="list-icons">
                                                                 @foreach($book->booking_facilities as $adFac)
-                                                                    <li><i class="fa fa-caret-right text-black-50"></i> {{ $adFac->facilities->facility_name ?? '' }}</li>
+                                                                    <li><i class="fa fa-caret-right text-black"></i> {{ $adFac->facilities->facility_name ?? '' }}</li>
                                                                 @endforeach
                                                                 </ul>
                                                             @endif
