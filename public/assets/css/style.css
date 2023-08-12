@@ -30865,7 +30865,7 @@ code {
   .table tbody tr td {
     vertical-align: middle;
     border-color: #E6E6E6;
-    white-space: nowrap; }
+    white-space: unset; }
   .table:not(.table-bordered) thead th {
     border-top: none; }
   .table .thead-primary th {
