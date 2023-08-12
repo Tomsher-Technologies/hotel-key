@@ -23,7 +23,7 @@
                 @if(Auth::user()->user_details->profile_image != null)
                     <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg white-back" alt="">
                 @else
-                    <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg white-back" alt="">
+                    <img src="{{ asset('assets/images/no_users.png') }}" class="avatar avatar-lg white-back" alt="">
                 @endif
     
         </a>
@@ -70,7 +70,7 @@
                                             @if(Auth::user()->user_details->profile_image != null)
                                                 <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg" alt="">
                                             @else
-                                                <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg" alt="">
+                                                <img src="{{ asset('assets/images/no_users.png') }}" class="avatar avatar-lg" alt="">
                                             @endif
                                         </div>
                                         <div class="header-info">
@@ -86,7 +86,7 @@
                                             @if(Auth::user()->user_details->profile_image != null)
                                                 <img src="{{ asset(Auth::user()->user_details->profile_image) }}" class="avatar avatar-lg" alt="">
                                             @else
-                                                <img src="{{ asset('assets/images/no_users.svg') }}" class="avatar avatar-lg" alt="">
+                                                <img src="{{ asset('assets/images/no_users.png') }}" class="avatar avatar-lg" alt="">
                                             @endif
                                         </div>	
                                         <div class="ms-3">
