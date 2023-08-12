@@ -76,7 +76,7 @@
                         <li class="mini-dashboard">Profile</li>
                         <li><a href="{{ route('profile') }}">View Profile</a></li>
                         <li><a href="{{ route('update-profile') }}">Edit Profile</a></li>
-                        <li><a href="{{ route('change-password') }}">Change Password</a></li>
+                        <!-- <li><a href="{{ route('change-password') }}">Change Password</a></li> -->
                     </ul>
                 </li>
             @endif
