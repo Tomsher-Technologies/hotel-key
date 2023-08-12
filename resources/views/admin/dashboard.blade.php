@@ -6,10 +6,11 @@
 	<div class="container-fluid">
 		<h3 class="head-title">Dashboard</h3>
 		<div class="row">
-			<div class="col-xl-12 box-warpper">
+			<div class="col-xl-12">
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="row">
+							
 							<div class="col-xl-4 mb-3">
 								<div class="example">
 									<p class="mb-1">Date Range Filter</p>
@@ -31,8 +32,8 @@
 							@else
 								<input type="hidden" name="hotel" id= "hotel" value="">
 							@endif
-							<div class="col-xl-3 mb-3 margin-auto">
-								<button type="button" class="btn btn-primary light">Reset Filter</button>
+							<div class="col-xl-3 mb-3 margin-auto" >
+								<a href="{{ route('admin.dashboard') }}" class="btn btn-primary light">Reset Filter</a>
 							</div>
 						</div>
 						<div class="row">
@@ -42,7 +43,7 @@
 										<div class="depostit-card-media d-flex justify-content-between">
 											<div>
 												@if(Auth::user()->user_type == 'admin')
-												<h6 class="font-w400 mb-0">Hotel <br>Check-In</h6>
+												<h6 class="font-w400 mb-0">Hotel Check-In</h6>
 												@else
 												<h6 class="font-w400 mb-0">Check-In</h6>
 												@endif
@@ -73,7 +74,7 @@
 										<div class="depostit-card-media d-flex justify-content-between">
 											<div>
 												@if(Auth::user()->user_type == 'admin')
-												<h6 class="font-w400 mb-0">Hotel <br> Check-Out</h6>
+												<h6 class="font-w400 mb-0">Hotel Check-Out</h6>
 												@else
 												<h6 class="font-w400 mb-0">Check-Out</h6>
 												@endif
@@ -104,7 +105,7 @@
 									<div class="card-body depostit-card">
 										<div class="depostit-card-media d-flex justify-content-between">
 											<div>
-												<h6 class="font-w400 mb-0"> Users</h6>
+												<h6 class="font-w400 mb-0"> New App Users</h6>
 												<h3 id="users"></h3>
 											</div>
 											<div class="icon-box">
@@ -158,34 +159,97 @@
 							
 						</div>
 					</div>
-					<!-- <div class="col-xl-12">
+					<div class="col-xl-12">
 						<div class="card overflow-hidden">
 							<div class="card-header border-0 pb-0 flex-wrap">
-								<h4 class="card-title mb-0">Projects Overview</h4>
-								<ul class="nav nav-pills mix-chart-tab" id="pills-tab" role="tablist">
-									<li class="nav-item" role="presentation">
-									<button class="nav-link active" data-series="week" id="pills-week-tab" data-bs-toggle="pill" data-bs-target="#pills-week" type="button" role="tab"  aria-selected="true">Week</button>
-									</li>
-									<li class="nav-item" role="presentation">
-									<button class="nav-link" data-series="month" id="pills-month-tab" data-bs-toggle="pill" data-bs-target="#pills-month" type="button" role="tab"  aria-selected="false">Month</button>
-									</li>
-									<li class="nav-item" role="presentation">
-									<button class="nav-link" data-series="year" id="pills-year-tab" data-bs-toggle="pill" data-bs-target="#pills-year" type="button" role="tab"  aria-selected="false">Year</button>
-									</li>
-									<li class="nav-item" role="presentation">
-									<button class="nav-link" data-series="all" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all" type="button" role="tab" aria-selected="false">All</button>
-									</li>
-								</ul>
+								<h3>System Overview</h3>
 							</div>
-							<div class="card-body custome-tooltip p-0">
-								<div id="overiewChart"></div>
+							<div class="card-body custome-tooltip">
+								<div class="row">
+									@if(Auth::user()->user_type == 'admin')
+									<div class="col-xl-3  col-lg-6 col-sm-6">
+										<div class="widget-stat card bg-info">
+											<div class="card-body  p-4">
+												<div class="media">
+													<span class="me-3">
+														<i class="fa fa-users text-black"></i>
+													</span>
+													<div class="media-body">
+														<p class="mb-1 text-black">Total Users</p>
+														<h3 id="total_users">{{ $user_count}}</h3>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xl-3  col-lg-6 col-sm-6">
+										<div class="widget-stat card bg-success">
+											<div class="card-body  p-4">
+												<div class="media">
+													<span class="me-3">
+														<i class="fa fa-building text-black"></i>
+													</span>
+													<div class="media-body">
+														<p class="mb-1 text-black">Total Hotels</p>
+														<h3 class="">{{ $hotel_count}}</h3>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									@endif
+									<div class="col-xl-3  col-lg-6 col-sm-6">
+										<div class="widget-stat card bg-primary">
+											<div class="card-body  p-4">
+												<div class="media">
+													<span class="me-3">
+														<i class="fa fa-user-check text-black"></i>
+													</span>
+													<div class="media-body">
+														<p class="mb-1 text-black">Total Check-Ins</p>
+														<h3 class="">{{ $checkinCount}}</h3>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div> -->
-					
+					</div>
+					@if(Auth::user()->user_type == 'admin')
+						<div class="col-xl-12">
+							<div class="card overflow-hidden">
+								<div class="card-body custome-tooltip">
+									<div id="pieChart"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xl-12">
+							<div class="card overflow-hidden">
+								<div class="card-header border-0 pb-0 flex-wrap">
+									<div class="row w-100">
+										<div class="col-xl-10">
+											<h3 class="highcharts-title">User Overview</h3>
+										</div>
+
+										<div class="col-xl-2">
+											<input type="text" name="chart_date_range" id="chart_date_range" class="form-control pointer w-40 ml-10 input-right " readonly placeholder="Select Year" value="{{ date('Y') }}">
+										</div>
+									</div>
+								</div>
+								<div class="card-body custome-tooltip">
+									<div id="monthChart"></div>
+								</div>
+							</div>
+						</div>
+					@endif
+
 				</div>
 			</div>
-			@include('admin.includes.calendar')
+		
 		</div>
 	</div>
 </div>
@@ -196,14 +260,87 @@
 @section('header')
 <link rel="stylesheet" href="{{ asset('assets/css/daterangepicker.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/highcharts.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datepicker.min.css') }}">
+<style>
+
+.highcharts-pie-series .highcharts-point {
+    stroke: #ede;
+    stroke-width: 2px;
+}
+
+.highcharts-pie-series .highcharts-data-label-connector {
+    stroke: silver;
+    stroke-dasharray: 2, 2;
+    stroke-width: 2px;
+}
+
+.highcharts-figure,
+.highcharts-data-table table {
+    min-width: 320px;
+    max-width: 600px;
+    margin: 1em auto;
+}
+
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+.highcharts-root text {
+    font-weight: 700!important;
+}
+.highcharts-title{
+	font-size: 1.5rem !important;
+}
+
+	</style>
 @endsection
 
 @section('footer')
 <script src="{{ asset('assets/js/daterangepicker.js') }}"></script>
 <script src="{{ asset('assets/js/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/highcharts.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
 <script type="text/javascript">
 	 $('.select2').select2({
         'placeholder':'Select'
+    });
+
+	$("#chart_date_range").datepicker({
+        format: "yyyy",
+        viewMode: "years", 
+        minViewMode: "years"
     });
 
 	var today = getToday();
@@ -287,5 +424,108 @@
             }
         });
     }
+	
+	
+	var user_type = '{{ Auth::user()->user_type }}';
+	if(user_type == 'admin'){
+		pieChart('');
+		monthChartData('');
+	}
+	
+	var pieChart = Highcharts.chart('pieChart', {
+		chart: {
+			styledMode: true
+		},
+		title: {
+			text: 'Hotels Overview'
+		},
+		xAxis: {
+			categories: []
+		},
+		series: [{
+			type: 'pie',
+			allowPointSelect: true,
+			keys: ['name', 'y', 'selected', 'sliced'],
+			data: [
+				
+			],
+			showInLegend: true
+		}]
+	});
+
+
+	function pieChart(year){
+        if(year == ''){
+            var tod = new Date();
+            year = tod.getFullYear();
+        }
+        
+        $.ajax({
+            url: "{{ route('piechart-counts')}}",
+            type: "GET",
+            data: {
+                "_token": "{{ csrf_token() }}", "year":year
+            },
+            success: function(response) {
+                var resp = JSON.parse(response);
+                pieChart.series[0].setData(resp.series, true);
+            }
+        });  
+    }
+
+	var monthChart = Highcharts.chart('monthChart', {
+						chart: {
+							type: 'column'
+						},
+						title: {
+							text: '',
+							align: 'left'
+						},
+						xAxis: {
+							categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+						},
+
+						plotOptions: {
+							series: {
+								pointWidth: 20
+							}
+						},
+
+						series: [{
+							name:'Total Users',
+							color: 'green',
+							data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0]
+						}]
+	});
+
+
+	function monthChartData(year){
+        if(year == ''){
+            var tod = new Date();
+            year = tod.getFullYear();
+        }
+        $.ajax({
+            url: "{{ route('monthChart-counts')}}",
+            type: "GET",
+            data: {
+                "_token": "{{ csrf_token() }}", "year":year
+            },
+            success: function(response) {
+                var resp = JSON.parse(response);
+                console.log(resp);
+                monthChart.xAxis[0].setCategories(resp.categories, true);
+                monthChart.series[0].setData(resp.series, true);
+            }
+        });  
+    }
+
+	$('#chart_date_range').datepicker().on('changeDate', function (ev) {
+        $('#chart_date_range').datepicker('hide');
+        var year = $(this).val();
+        monthChartData(year);
+    });
+
+	
+
 </script>
 @endsection

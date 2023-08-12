@@ -38,7 +38,19 @@ class HomeController extends Controller
                         ->where('is_deleted', 0)
                         ->orderBy('name', 'ASC')
                         ->get()->toArray();
-        return  view('admin.dashboard',compact('hotels'));
+        $hotel_count = count($hotels);
+
+        $user_count = User::where('user_type','user')
+                            ->where('is_deleted', 0)
+                            ->count();
+
+        $bookings_count = HotelBookings::where('is_deleted', 0);
+        if(Auth::user()->user_type == 'hotel'){
+            $bookings_count->where('hotel_id',Auth::user()->id);
+        }
+        $checkinCount = $bookings_count->count();
+
+        return  view('admin.dashboard',compact('hotels','hotel_count','user_count','checkinCount'));
     }
 
     public function dashboardCounts(Request $request)
@@ -78,6 +90,76 @@ class HomeController extends Controller
         
         return json_encode(array('status' => true, 'data' => $data));
     }
+
+    public function pieChart(Request $request)
+    {
+        $year = $request->year;
+       
+        $hotels = User::where('user_type','hotel')
+                        ->where('is_deleted', 0)
+                        ->orderBy('name', 'ASC')
+                        ->get()->toArray();
+        // DB::enableQueryLog();
+        $bookingCounts = HotelBookings::select('hotel_id', DB::raw('count(*) as count'))
+                                ->where('is_deleted', 0)
+                                ->groupBy('hotel_id')
+                                ->get()->pluck('count','hotel_id')->toArray();
+        // dd(DB::getQueryLog());
+        // echo '<pre>';
+        // print_r( $bookingCounts);
+        // die;
+        $data = [];   
+        foreach($hotels as $key => $array){
+            if(array_key_exists($array["id"], $bookingCounts)){
+                $count = $bookingCounts[$array["id"]];
+            }else{
+                $count=0 ;
+            }
+            $data[] = array(
+                "name"    =>$array["name"],
+                "y" => $count,
+                "selected" => false
+            );
+        }
+        return json_encode(array('status' => true, 'series' => $data));
+    }
+
+    public function monthChartCounts(Request $request)
+    {
+        $year = $request->year;
+        $monthlyArray =  ['January' => 0,
+                            'February' => 0,
+                            'March' => 0,
+                            'April' => 0,
+                            'May' => 0,
+                            'June' => 0,
+                            'July' => 0,
+                            'August' => 0,
+                            'September' => 0,
+                            'October' => 0,
+                            'November' => 0,
+                            'December' => 0
+                        ];
+
+        $query = User::select(DB::raw('count(id) as count'), DB::raw("MONTHNAME(created_at)  as month")) 
+                                ->whereYear('created_at', $year)
+                                ->where('is_deleted',0)
+                                ->where('user_type','user');
+        
+        $dataTotal = $query->groupBy('month')
+                    ->orderBy('month')// you don't really need this one 
+                    ->get()
+                    ->toArray();//fetch the results
+                 
+        foreach($dataTotal as $key => $array){//add the results to the default array
+            $monthlyArray[$array['month']] = $array['count'];
+        }
+        $array_keys = array_keys($monthlyArray);
+        $array_values = array_values($monthlyArray);
+        return json_encode(array('status' => true, 'categories' => $array_keys, 'series' => $array_values));
+    }
+
+
 
     public function getAllBookings(Request $request){
         $search_term = $checkin_search = $checkout_search = '';

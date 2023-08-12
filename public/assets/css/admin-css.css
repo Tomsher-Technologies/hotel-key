@@ -42,6 +42,7 @@
 }
 .margin-auto{
     margin: auto !important;
+    margin-left: 0 !important;
 }
 .search-section{
     border: 1px solid #80808054 !important;
@@ -67,4 +68,7 @@
 }
 .white-back{
     background-color: white !important;
+}
+.w-100{
+    width: 100% !important;
 }
