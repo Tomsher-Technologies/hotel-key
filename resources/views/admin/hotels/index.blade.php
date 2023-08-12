@@ -78,7 +78,7 @@
                                                     
                                                     <td>
                                                         <div class="d-flex">
-                                                            <a href="{{ route('edit-hotel',['id'=>$hot->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1 "><i class="fa fa-pencil"></i></a>
+                                                            <a href="{{ route('edit-hotel',['id'=>$hot->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1 "  title="Edit Hotel"><i class="fa fa-pencil"></i></a>
                                                             <a href="#" class="btn btn-danger shadow btn-xs sharp deleteHotel"  data-id="{{$hot->id}}" title="Delete Hotel"><i class="fa fa-trash"></i></a>
                                                         </div>
                                                     </td>

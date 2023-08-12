@@ -175,10 +175,21 @@ class ApiAuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     protected function createNewToken($token){
+        $data = auth('api')->user();
+        
+        $details = array(
+            'id' =>  $data['id'],
+            'user_type' =>  $data['user_type'],
+            'name' =>  $data['name'],
+            'email' =>  $data['email'],
+            'is_active' =>  $data['is_active'],
+            'profile_image' =>  ( $data->user_details->profile_image != '') ? asset($data->user_details->profile_image) : '',
+        );
+       
         return response()->json([
             'status' => true,
             'message' => 'Successfully loggedIn',
-            'data' => auth('api')->user(),
+            'data' => $details,
             'access_token' => $token,
             'token_type' => 'bearer',
             // 'expires_in' => auth('api')->factory()->getTTL() * 60,

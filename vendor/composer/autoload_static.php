@@ -605,6 +605,7 @@ class ComposerStaticInit8137a91cab049878de9628bd14bdf2ec
         'App\\Models\\Countries' => __DIR__ . '/../..' . '/app/Models/Countries.php',
         'App\\Models\\HotelBookings' => __DIR__ . '/../..' . '/app/Models/HotelBookings.php',
         'App\\Models\\HotelFacilities' => __DIR__ . '/../..' . '/app/Models/HotelFacilities.php',
+        'App\\Models\\Notifications' => __DIR__ . '/../..' . '/app/Models/Notifications.php',
         'App\\Models\\States' => __DIR__ . '/../..' . '/app/Models/States.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\UserDetails' => __DIR__ . '/../..' . '/app/Models/UserDetails.php',

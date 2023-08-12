@@ -13,6 +13,7 @@ use App\Models\PackageModules;
 use App\Models\CourseClasses;
 use App\Models\TeacherDivisions;
 use App\Models\States;
+use App\Models\HotelBookings;
 use Auth;
 use Validator;
 use Storage;
@@ -211,6 +212,66 @@ class HotelController extends Controller
         User::where('id', $request->id)->update(['is_deleted' => 1]);
     }
 
+    public function allHotels()
+    {
+        $hotels = User::with('user_details')->select('*')
+                    ->where('user_type','hotel')
+                    ->where('is_deleted',0)
+                    ->orderBy('name','ASC')->get();
+        return view('admin.hotels.hotel_list',compact('hotels'));
+    }
+
+
+    public function getAllBookings(Request $request){
+        $hotel_search = $user_search = $checkin_search = $checkout_search = '';
+
+        if ($request->has('hotel')) {
+            $hotel_search = $request->hotel;
+        }
+        if ($request->has('user')) {
+            $user_search = $request->user;
+        }
+        if ($request->has('checkin')) {
+            $checkin_search = $request->checkin;
+        }
+        if ($request->has('checkout')) {
+            $checkout_search = $request->checkout;
+        }
+
+        $query = HotelBookings::with(['hotel','main_user','additional_users_without_main_user','booking_facilities'])
+                            ->select('*')
+                            ->where('is_deleted',0)
+                            ->orderBy('id','DESC');
+
+        if($user_search){
+            $query->Where(function ($query) use ($user_search) {
+                $query->orWhereHas('all_additional_users', function ($query)  use($user_search) {
+                    $query->where('user_id', $user_search);
+                });  
+            }); 
+        }
+        if($hotel_search){
+            $query->where('hotel_id', $hotel_search);
+        }
+
+        if($checkin_search != '' || $checkout_search != ''){
+            if($checkin_search != '' && $checkout_search != ''){
+                $query->whereDate('checkin_date', '=', $checkin_search)
+                ->whereDate('checkout_date',   '=', $checkout_search);
+            }elseif($checkin_search == '' && $checkout_search != ''){
+                $query->whereDate('checkout_date', '=', $checkout_search);
+            }elseif($checkin_search != '' && $checkout_search == ''){
+                $query->whereDate('checkin_date', '=', $checkin_search);
+            }
+        }
+
+        $bookings = $query->paginate(10);
+
+        $users = User::where('user_type', 'user')->where('is_deleted',0)->orderBy('name', 'ASC')->get();
+        $hotels = User::where('user_type', 'hotel')->where('is_deleted',0)->orderBy('name', 'ASC')->get();
+       
+        return  view('admin.hotels.bookings',compact('bookings','users','hotels','user_search','hotel_search','checkin_search','checkout_search'));
+    }
     
    
 }

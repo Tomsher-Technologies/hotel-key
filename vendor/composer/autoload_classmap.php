@@ -30,6 +30,7 @@ return array(
     'App\\Models\\Countries' => $baseDir . '/app/Models/Countries.php',
     'App\\Models\\HotelBookings' => $baseDir . '/app/Models/HotelBookings.php',
     'App\\Models\\HotelFacilities' => $baseDir . '/app/Models/HotelFacilities.php',
+    'App\\Models\\Notifications' => $baseDir . '/app/Models/Notifications.php',
     'App\\Models\\States' => $baseDir . '/app/Models/States.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\UserDetails' => $baseDir . '/app/Models/UserDetails.php',

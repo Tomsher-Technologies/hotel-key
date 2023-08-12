@@ -186,6 +186,6 @@ class UserController extends Controller
         User::where('id', $request->id)->update(['is_deleted' => 1]);
     }
 
-    
+   
    
 }
