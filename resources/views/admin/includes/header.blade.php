@@ -45,7 +45,7 @@
                     </div>
                     <ul class="navbar-nav header-right">
                         <li class="nav-item dropdown notification_dropdown">
-                            <a class="nav-link open-cal">
+                            <!-- <a class="nav-link open-cal">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3.09253 9.40445H20.9165" stroke="#111828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M16.442 13.3097H16.4512" stroke="#111828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -58,7 +58,7 @@
                                     <path d="M7.9654 2V5.29078" stroke="#111828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2383 3.5791H7.77096C4.83427 3.5791 3 5.21504 3 8.22213V17.2718C3 20.3261 4.83427 21.9999 7.77096 21.9999H16.229C19.175 21.9999 21 20.3545 21 17.3474V8.22213C21.0092 5.21504 19.1842 3.5791 16.2383 3.5791Z" stroke="#111828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                            </a>
+                            </a> -->
                         </li>
                        
                         <!-- <li class="nav-item align-items-center header-border"><a href="analytics.html" class="btn btn-primary">Analytics</a></li> -->

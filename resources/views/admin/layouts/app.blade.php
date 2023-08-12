@@ -97,9 +97,9 @@
 	<script>
         $('div.alert').not('.alert-important').delay(5000).fadeOut(350);
 		$(document).ready(function(){
-		  $(".nav-item .open-cal").click(function(){
-			$(".calendar-warpper").toggleClass("active");
-		  });
+        // $(".nav-item .open-cal").click(function(){
+		// 	$(".calendar-warpper").toggleClass("active");
+		//   });
 		});
 	</script>
 	@yield('footer')

@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\UserController;
     Route::group(['middleware' => ['auth','admin']], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/dashboard-counts', [HomeController::class, 'dashboardCounts'])->name('dashboard-counts');
+        Route::get('/piechart-counts', [HomeController::class, 'pieChart'])->name('piechart-counts');
+        Route::get('/monthChart-counts', [HomeController::class, 'monthChartCounts'])->name('monthChart-counts');
        
         Route::namespace('Admin')->prefix('hotel')->group(function () {
             Route::get('/all-bookings', [HomeController::class, 'getAllBookings'])->name('all-bookings');

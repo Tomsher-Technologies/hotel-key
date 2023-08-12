@@ -50,14 +50,14 @@
                                     <table class="table table-responsive-md">
                                         <thead>
                                         <tr>
-                                                <th class="text-center"><strong>Sl No.</strong></th>
-                                                <th><strong>Master User</strong></th>
-                                                <th class="text-center"><strong>Room Number</strong></th>
-                                                <th class="text-center"><strong>Check-In</strong></th>
-                                                <th class="text-center"><strong>Check-Out</strong></th>
-                                                <th><strong>Additional Users</strong></th>
-                                                <th><strong>Additional Facilities</strong></th>
-                                                <th><strong>Action</strong></th>
+                                                <th class="text-center text-secondary"><strong>Sl No.</strong></th>
+                                                <th class="text-secondary"><strong>Master User</strong></th>
+                                                <th class="text-center text-secondary"><strong>Room Number</strong></th>
+                                                <th class="text-center text-secondary"><strong>Check-In</strong></th>
+                                                <th class="text-center text-secondary"><strong>Check-Out</strong></th>
+                                                <th class="text-secondary"><strong>Additional Users</strong></th>
+                                                <th class="text-secondary"><strong>Additional Facilities</strong></th>
+                                                <th class="text-secondary"><strong>Action</strong></th>
                                             </tr>
                                         </thead>
                                         <tbody>
