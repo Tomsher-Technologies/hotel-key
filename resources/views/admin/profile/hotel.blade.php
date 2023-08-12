@@ -47,6 +47,13 @@
                                                 </div>
 
                                                 <div class="mb-3 row">
+                                                    <label class="col-lg-4 col-form-label" for="validationCustom03">Password</label>
+                                                    <div class="col-lg-8">
+                                                        <input type="password"autocomplete="new-password" class="form-control" value="{{ old('password') }}" id="password" name="password" placeholder="Enter password">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3 row">
                                                     <label class="col-lg-4 col-form-label" for="validationCustom04">Location <span
                                                             class="text-danger">*</span>
                                                     </label>

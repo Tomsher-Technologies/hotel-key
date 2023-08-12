@@ -444,6 +444,7 @@
 		},
 		series: [{
 			type: 'pie',
+			name:'Bookings',
 			allowPointSelect: true,
 			keys: ['name', 'y', 'selected', 'sliced'],
 			data: [

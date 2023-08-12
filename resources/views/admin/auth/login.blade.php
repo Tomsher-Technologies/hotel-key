@@ -28,6 +28,11 @@
                             <h3 class="title">Sign In</h3>
                             <p>Sign in to your account to start using Hotel Key</p>
                         </div>
+                        @if (Session::has('message'))
+                            <div class="alert alert-success" role="alert">
+                                {{ Session::get('message') }}
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('login.custom') }}" autocomplete="off">
                             @csrf
                             <div class="mb-4">
@@ -51,7 +56,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-4">
-                                    <a href="page-forgot-password.html" class="btn-link text-primary">Forgot
+                                    <a href="{{ route('forget.password.get') }}" class="btn-link text-primary">Forgot
                                         Password?</a>
                                 </div>
                             </div>
