@@ -10,6 +10,7 @@
 				<div class="row">
 					<div class="col-xl-12">
 						<div class="row">
+							
 							<div class="col-xl-4 mb-3">
 								<div class="example">
 									<p class="mb-1">Date Range Filter</p>
@@ -423,8 +424,14 @@
             }
         });
     }
-	pieChart('');
-	monthChartData('');
+	
+	
+	var user_type = '{{ Auth::user()->user_type }}';
+	if(user_type == 'admin'){
+		pieChart('');
+		monthChartData('');
+	}
+	
 	var pieChart = Highcharts.chart('pieChart', {
 		chart: {
 			styledMode: true
