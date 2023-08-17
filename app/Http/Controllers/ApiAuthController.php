@@ -298,10 +298,16 @@ class ApiAuthController extends Controller
 
     public function getUserReservationHistory(Request $request){
         $user_id = $request->user_id;
+        $startDate = isset($request->startDate) ? $request->startDate : '';
+        $endDate   = isset($request->endDate) ? $request->endDate : '';
         // get all reservations of user
         $query = BookingAdditionalUsers::with(['hotel_booking'])->where('user_id', $user_id);
-        $query->whereHas('hotel_booking', function ($query) {
+        $query->whereHas('hotel_booking', function ($query) use($startDate, $endDate){
             $query->where('is_deleted', 0);
+            if($startDate != '' && $endDate != ''){
+                $query->whereDate('checkin_date', '>=', $startDate)
+                ->whereDate('checkin_date', '<=', $endDate);
+            }
         });
         $hotels = $query->orderBy('booking_id','desc')->get();
         if(isset($hotels[0])){
