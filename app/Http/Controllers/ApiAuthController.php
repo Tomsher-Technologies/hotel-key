@@ -197,7 +197,6 @@ class ApiAuthController extends Controller
         ]);
     }
 
-   
     
     // Update user profile details
     public function updateUserData(Request $request){
@@ -258,7 +257,7 @@ class ApiAuthController extends Controller
         $userId = $request->user_id;
         $user = User::find($userId);
         if (!Hash::check($request->get('current_password'), $user->password)){
-            return response()->json(['status' => false,'message' => 'Current Password is Invalid', 'data' => []]);
+            return response()->json(['status' => false,'message' => 'Old password is incorrect', 'data' => []]);
         }
  
         if (strcmp($request->get('current_password'), $request->new_password) == 0){
