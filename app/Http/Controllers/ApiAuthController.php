@@ -180,7 +180,8 @@ class ApiAuthController extends Controller
         $details = array(
             'id' =>  $data['id'],
             'user_type' =>  $data['user_type'],
-            'name' =>  $data['name'],
+            'name' =>  $data->user_details->first_name,
+            'profile_id' => $data->user_details->profile_id,
             'email' =>  $data['email'],
             'is_active' =>  $data['is_active'],
             'profile_image' =>  ( $data->user_details->profile_image != '') ? asset($data->user_details->profile_image) : '',
