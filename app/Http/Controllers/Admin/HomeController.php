@@ -311,7 +311,7 @@ class HomeController extends Controller
             BookingFacilities::insert($facData);
         }
         
-        flash('Booking has been created successfully')->success();
+        flash('Access has been created successfully')->success();
         return redirect()->route('all-bookings');
     }
 
@@ -438,7 +438,7 @@ class HomeController extends Controller
             }
             BookingFacilities::insert($facData);
         }
-        flash('Booking details has been updated successfully')->success();
+        flash('Access details has been updated successfully')->success();
         return redirect()->route('all-bookings');
     }
 

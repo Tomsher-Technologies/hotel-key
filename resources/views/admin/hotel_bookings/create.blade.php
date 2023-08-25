@@ -12,7 +12,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <div>
-                                    <h3 class="card-title main-head">Add New Booking</h3>
+                                    <h3 class="card-title main-head">Add New Access</h3>
                                 </div>
                                 <a href="{{ route('all-bookings') }}" class="btn btn-primary">Back</a>
                             </div>
@@ -66,7 +66,7 @@
                                                 </div>
 
                                                 <div class="mb-3 row form-material">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Check-In<span
+                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Access-In<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control datetime" value="{{ old('check_in') }}"  id="check_in" name="check_in" placeholder="YYYY-MM-DD HH:mm">
@@ -77,7 +77,7 @@
                                                 </div>
 
                                                 <div class="mb-3 row form-material">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Check-Out<span
+                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Access-Out<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control datetime" value="{{ old('check_out') }}"  id="check_out" name="check_out" placeholder="YYYY-MM-DD HH:mm">
