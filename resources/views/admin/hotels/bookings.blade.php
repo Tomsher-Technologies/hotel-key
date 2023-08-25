@@ -40,17 +40,17 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="mb-3 col-sm-2">
+                                        <div class="mb-3 col-sm-3">
                                             <label class="form-label">Access-In Date</label>
                                             <input type="text" class="form-control" value="{{ $checkin_search }}" id="checkin" name="checkin"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
-                                        <div class="mb-3 col-sm-2">
+                                        <div class="mb-3 col-sm-3">
                                             <label class="form-label">Access-Out Date</label>
                                             <input type="text" class="form-control" value="{{ $checkout_search }}" id="checkout" name="checkout"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
-                                        <div class="mb-3 col-sm-2 margin-auto">
+                                        <div class="mb-3 col-sm-12 text-center margin-auto">
                                             <button class="btn btn-primary light" type="submit">Search</button>
                                             <a href="{{ route('bookings') }}" class="btn btn-danger light" type="button">Reset</a>
                                         </div>

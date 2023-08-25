@@ -49,7 +49,9 @@
     border-radius: 15px !important;
     padding: 15px !important;
 }
-
+.w-60{
+    width: 60% !important;
+}
 .select2-selection{
     background: #fff !important;
     color: #333333 !important;

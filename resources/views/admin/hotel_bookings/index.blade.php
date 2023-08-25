@@ -21,7 +21,7 @@
                              @include('flash::message')
                                 <form  action="" method="GET">
                                     <div class="row search-section">
-                                        <div class="mb-3 col-sm-6">
+                                        <div class="mb-3 col-sm-5">
                                             <label class="form-label">User Name/Profile ID/Email/Room Number</label>
                                             <input type="text" class="form-control" value="{{ $search_term }}" id="search_term" name="search_term"
                                             placeholder="Search with User Name or Profile ID or Email or Room Number" autocomplete="off">
@@ -37,7 +37,7 @@
                                             <input type="text" class="form-control" value="{{ $checkout_search }}" id="checkout" name="checkout"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
-                                        <div class="mb-3 col-sm-2 margin-auto">
+                                        <div class="mb-3 col-sm-3 margin-auto">
                                             <button class="btn btn-primary light" type="submit">Search</button>
                                             <a href="{{ route('all-bookings') }}" class="btn btn-danger light" type="button">Reset</a>
                                         </div>
