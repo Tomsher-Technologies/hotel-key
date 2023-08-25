@@ -13,12 +13,12 @@
                         <div class="card dz-card" id="bootstrap-table2">
                             <div class="card-header flex-wrap d-flex justify-content-between">
                                 <div>
-                                    <h3 class="card-title main-head">All Bookings</h3>
+                                    <h3 class="card-title main-head">All Access</h3>
                                 </div>
-                                <a href="{{ route('add-booking') }}" class="btn btn-primary">Add New Booking</a>
+                                <a href="{{ route('add-booking') }}" class="btn btn-primary">Add New Access</a>
                             </div>
 							 <div class="card-body">
-                                
+                             @include('flash::message')
                                 <form  action="" method="GET">
                                     <div class="row search-section">
                                         <div class="mb-3 col-sm-6">
@@ -28,12 +28,12 @@
                                             
                                         </div>
                                         <div class="mb-3 col-sm-2">
-                                            <label class="form-label">Check-In Date</label>
+                                            <label class="form-label">Access-In Date</label>
                                             <input type="text" class="form-control" value="{{ $checkin_search }}" id="checkin" name="checkin"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
                                         <div class="mb-3 col-sm-2">
-                                            <label class="form-label">Check-Out Date</label>
+                                            <label class="form-label">Access-Out Date</label>
                                             <input type="text" class="form-control" value="{{ $checkout_search }}" id="checkout" name="checkout"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
@@ -53,8 +53,8 @@
                                                 <th class="text-center text-secondary"><strong>Sl No.</strong></th>
                                                 <th class="text-secondary"><strong>Master User</strong></th>
                                                 <th class="text-center text-secondary"><strong>Room Number</strong></th>
-                                                <th class="text-center text-secondary"><strong>Check-In</strong></th>
-                                                <th class="text-center text-secondary"><strong>Check-Out</strong></th>
+                                                <th class="text-center text-secondary"><strong>Access-In</strong></th>
+                                                <th class="text-center text-secondary"><strong>Access-Out</strong></th>
                                                 <th class="text-secondary"><strong>Additional Users</strong></th>
                                                 <th class="text-secondary"><strong>Additional Facilities</strong></th>
                                                 <th class="text-secondary"><strong>Action</strong></th>
@@ -92,8 +92,8 @@
                                                         
                                                         <td>
                                                             <div class="d-flex">
-                                                                <a href="{{ route('edit-booking',['id'=>$book->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1"><i class="fa fa-pencil"></i></a>
-                                                                <a href="#" class="btn btn-danger shadow btn-xs sharp deleteHotelBooking"  data-id="{{$book->id}}" title="Delete Booking"><i class="fa fa-trash"></i></a>
+                                                                <a href="{{ route('edit-booking',['id'=>$book->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1" title="Edit Access"><i class="fa fa-pencil"></i></a>
+                                                                <a href="#" class="btn btn-danger shadow btn-xs sharp deleteHotelBooking"  data-id="{{$book->id}}" title="Delete Access"><i class="fa fa-trash"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>

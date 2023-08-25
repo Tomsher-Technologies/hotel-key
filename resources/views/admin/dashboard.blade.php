@@ -43,9 +43,9 @@
 										<div class="depostit-card-media d-flex justify-content-between">
 											<div>
 												@if(Auth::user()->user_type == 'admin')
-												<h6 class="font-w400 mb-0">Hotel Check-In</h6>
+												<h6 class="font-w400 mb-0">Hotel Access-In</h6>
 												@else
-												<h6 class="font-w400 mb-0">Check-In</h6>
+												<h6 class="font-w400 mb-0">Access-In</h6>
 												@endif
 												<h3 id="checkins"></h3>
 											</div>
@@ -74,9 +74,9 @@
 										<div class="depostit-card-media d-flex justify-content-between">
 											<div>
 												@if(Auth::user()->user_type == 'admin')
-												<h6 class="font-w400 mb-0">Hotel Check-Out</h6>
+												<h6 class="font-w400 mb-0">Hotel Access-Out</h6>
 												@else
-												<h6 class="font-w400 mb-0">Check-Out</h6>
+												<h6 class="font-w400 mb-0">Access-Out</h6>
 												@endif
 												
 												<h3 id="checkouts"></h3>
@@ -207,7 +207,7 @@
 														<i class="fa fa-user-check text-black"></i>
 													</span>
 													<div class="media-body">
-														<p class="mb-1 text-black">Total Check-Ins</p>
+														<p class="mb-1 text-black">Total Access-In</p>
 														<h3 class="">{{ $checkinCount}}</h3>
 													</div>
 												</div>
@@ -444,7 +444,7 @@
 		},
 		series: [{
 			type: 'pie',
-			name:'Bookings',
+			name:'Access',
 			allowPointSelect: true,
 			keys: ['name', 'y', 'selected', 'sliced'],
 			data: [

@@ -13,7 +13,7 @@
                         <div class="card dz-card" id="bootstrap-table2">
                             <div class="card-header flex-wrap d-flex justify-content-between">
                                 <div>
-                                    <h3 class="card-title main-head">All Bookings</h3>
+                                    <h3 class="card-title main-head">All Access</h3>
                                 </div>
 
                             </div>
@@ -41,12 +41,12 @@
                                             </select>
                                         </div>
                                         <div class="mb-3 col-sm-2">
-                                            <label class="form-label">Check-In Date</label>
+                                            <label class="form-label">Access-In Date</label>
                                             <input type="text" class="form-control" value="{{ $checkin_search }}" id="checkin" name="checkin"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
                                         <div class="mb-3 col-sm-2">
-                                            <label class="form-label">Check-Out Date</label>
+                                            <label class="form-label">Access-Out Date</label>
                                             <input type="text" class="form-control" value="{{ $checkout_search }}" id="checkout" name="checkout"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
@@ -67,8 +67,8 @@
                                                 <th class="text-secondary"><strong>Hotel Name</strong></th>
                                                 <th class="text-secondary"><strong>Master User</strong></th>
                                                 <th class="text-center text-secondary"><strong>Room Number</strong></th>
-                                                <th class="text-center text-secondary"><strong>Check-In</strong></th>
-                                                <th class="text-center text-secondary"><strong>Check-Out</strong></th>
+                                                <th class="text-center text-secondary"><strong>Access-In</strong></th>
+                                                <th class="text-center text-secondary"><strong>Access-Out</strong></th>
                                                 <th class="text-secondary"><strong>Additional Users</strong></th>
                                                 <th class="text-secondary"><strong>Additional Facilities</strong></th>
                                             </tr>

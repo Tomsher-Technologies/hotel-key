@@ -34,12 +34,12 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="nav-text">Hotel Bookings</span>
+                        <span class="nav-text">Door Access</span>
                     </a>
                     <ul aria-expanded="false" class="mm-collapse" style="">
                         <li class="mini-dashboard">All</li>
-                        <li><a href="{{ route('all-bookings') }}">All Bookings</a></li>
-                        <li><a href="{{ route('add-booking') }}">Add New Booking</a></li>
+                        <li><a href="{{ route('all-bookings') }}">History</a></li>
+                        <li><a href="{{ route('add-booking') }}">Add New Access</a></li>
                     </ul>
                 </li>
 
@@ -99,7 +99,7 @@
                                 </path>
                             </svg>
                         </div>
-                        <span class="nav-text">Bookings</span>
+                        <span class="nav-text">All Access</span>
                     </a>
                 </li>
 
