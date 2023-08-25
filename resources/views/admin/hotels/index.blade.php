@@ -19,7 +19,7 @@
                             </div>
 							 <div class="card-body">
                                 <form  action="" method="GET">
-                                    <div class="input-group mb-3 w-50">
+                                    <div class="input-group mb-3 w-60">
                                         <input type="text" class="form-control" value="{{ $search_term }}" id="search_term" name="search_term"
                                         placeholder="Search with Hotel Name or Location or Email or Phone Number"  autocomplete="off">
                                         <button class="btn btn-primary light" type="submit">Search</button>
