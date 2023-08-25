@@ -174,7 +174,7 @@
 													<span class="me-3">
 														<i class="fa fa-users text-black"></i>
 													</span>
-													<div class="media-body">
+													<div class="media-body text-center">
 														<p class="mb-1 text-black">Total Users</p>
 														<h3 id="total_users">{{ $user_count}}</h3>
 													</div>
@@ -190,7 +190,7 @@
 													<span class="me-3">
 														<i class="fa fa-building text-black"></i>
 													</span>
-													<div class="media-body">
+													<div class="media-body  text-center">
 														<p class="mb-1 text-black">Total Hotels</p>
 														<h3 class="">{{ $hotel_count}}</h3>
 													</div>
@@ -206,8 +206,8 @@
 													<span class="me-3">
 														<i class="fa fa-user-check text-black"></i>
 													</span>
-													<div class="media-body">
-														<p class="mb-1 text-black">Total Access-In</p>
+													<div class="media-body text-center">
+														<p class="mb-1 text-black">Total Access Given</p>
 														<h3 class="">{{ $checkinCount}}</h3>
 													</div>
 												</div>
