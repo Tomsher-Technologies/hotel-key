@@ -301,15 +301,18 @@ class ApiAuthController extends Controller
         $startDate = isset($request->startDate) ? $request->startDate : '';
         $endDate   = isset($request->endDate) ? $request->endDate : '';
         // get all reservations of user
+       
         $query = BookingAdditionalUsers::with(['hotel_booking'])->where('user_id', $user_id);
         $query->whereHas('hotel_booking', function ($query) use($startDate, $endDate){
-            $query->where('is_deleted', 0);
+            $query->where('is_deleted', 0)
+            ->where('checkout_date','>=',date('Y-m-d'))->where('checkout_time','>=',date('H:i'));
             if($startDate != '' && $endDate != ''){
                 $query->whereDate('checkin_date', '>=', $startDate)
                 ->whereDate('checkin_date', '<=', $endDate);
             }
         });
         $hotels = $query->orderBy('booking_id','desc')->get();
+       
         if(isset($hotels[0])){
             $bookings = [];
             foreach($hotels as $hot){
@@ -383,6 +386,47 @@ class ApiAuthController extends Controller
                                     ->where('is_read',0)
                                     ->count();
         return response()->json(["status" => true, "message"=>"Success",'data' => $notifications]);
+    }
+
+    public function getHistory(Request $request){
+        $user_id = $request->user_id;
+        $startDate = isset($request->startDate) ? $request->startDate : '';
+        $endDate   = isset($request->endDate) ? $request->endDate : '';
+        // get all reservations of user
+       
+        $query = BookingAdditionalUsers::with(['hotel_booking'])->where('user_id', $user_id);
+        $query->whereHas('hotel_booking', function ($query) use($startDate, $endDate){
+            $query->where('is_deleted', 0)
+            ->where('checkout_date','<=',date('Y-m-d'));
+            if($startDate != '' && $endDate != ''){
+                $query->whereDate('checkin_date', '>=', $startDate)
+                ->whereDate('checkin_date', '<=', $endDate);
+            }
+        });
+        $hotels = $query->orderBy('booking_id','desc')->get();
+       
+        if(isset($hotels[0])){
+            $bookings = [];
+            foreach($hotels as $hot){
+                $hotelBooking = $hot->hotel_booking;
+                $hotelDetails = $hotelBooking->hotel->user_details;
+                $bookings[] = array(
+                    'booking_id' => $hotelBooking->id ?? '',
+                    'room_number' => $hotelBooking->room_number ?? '',
+                    'checkin_date' => $hotelBooking->checkin_date ?? '',
+                    'checkin_time' => $hotelBooking->checkin_time ?? '',
+                    'checkout_date' => $hotelBooking->checkout_date ?? '',
+                    'checkout_time' => $hotelBooking->checkout_time ?? '',
+
+                    'hotel_name' => $hotelBooking->hotel->name ?? '',
+                    'location' => $hotelDetails->location ?? '',
+                    'banner_image' => (isset($hotelDetails->banner_image) &&  $hotelDetails->banner_image != null) ? asset( $hotelDetails->banner_image) : ''
+                );
+            }
+            return response()->json([ 'status' => true, 'message' => 'Success', 'data' => $bookings]);
+        }else{
+            return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
+        }  
     }
 
 }
