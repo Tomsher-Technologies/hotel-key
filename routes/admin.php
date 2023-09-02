@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
     Route::post('forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
     Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
     Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
+    Route::get('reset-password-app/{token}', [ForgotPasswordController::class, 'showResetPasswordFormApp'])->name('reset.password.app');
+
+    Route::post('reset-password-app', [ForgotPasswordController::class, 'submitResetPasswordFormApp'])->name('reset.password.post.app');
     
     Route::group(['middleware' => ['auth','admin']], function () {
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
