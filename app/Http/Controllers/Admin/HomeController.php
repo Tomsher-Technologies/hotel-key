@@ -559,5 +559,36 @@ class HomeController extends Controller
         flash('Profile details has been updated successfully')->success();
         return redirect()->route('update-profile');
     }
+
+    public function usersAjax(Request $request)
+    {
+    	$data = [];
+
+        if($request->has('q')){
+            $search = $request->q;
+            $main = '';
+            if($request->has('main')){
+                $main = $request->main;
+            }
+        
+            $query = User::select('users.*','ud.profile_id')
+                        ->leftJoin('user_details as ud','users.id','=','ud.user_id')
+                        ->where('user_type','user')
+                        ->where('is_deleted',0)
+                        ->where('is_active',1);
+            if($main){
+                $query->where('users.id', '!=', $main);
+            }
+            if($search){
+                $query->Where(function ($query) use ($search) {
+                    $query->orWhere('users.name', 'LIKE', "%$search%")
+                    ->orWhere('users.email', 'LIKE', "%$search%")
+                    ->orWhere('ud.profile_id', 'LIKE', "%$search%");   
+                }); 
+            }           
+            $data = $query->orderBy('users.name','ASC')->get();
+        }
+        return response()->json($data);
+    }
    
 }

@@ -584,6 +584,7 @@ class ComposerStaticInit8137a91cab049878de9628bd14bdf2ec
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\CustomAuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CustomAuthController.php',
+        'App\\Http\\Controllers\\Admin\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Admin\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/HomeController.php',
         'App\\Http\\Controllers\\Admin\\HotelController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/HotelController.php',
         'App\\Http\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserController.php',

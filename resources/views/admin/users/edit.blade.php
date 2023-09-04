@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'Update User')
 @section('content')
 
 <div class="content-body">

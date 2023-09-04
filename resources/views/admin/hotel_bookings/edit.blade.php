@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'Update Access')
 @section('content')
 
 <div class="content-body">
@@ -20,26 +20,22 @@
                                 <div class="form-validation">
                                     <form class="form-horizontal" id="hotelBooking" action="{{ route('update-booking', $booking->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        @php   $userOptions = '<option value="">Select User</option>'; @endphp
-                                        @foreach($users as $user)
-                                            @php 
-                                                $select = '';
-                                                if($booking->main_user_id == $user->id){
-                                                    $select = 'selected';
-                                                }
-                                                $userOptions .= '<option value="'. $user->id .'" '.$select.'>'.$user->name.' ('.$user->email.')</option>';
-                                            @endphp
-                                        @endforeach
+                                        
                                         <div class="row">
                                             <div class="col-xl-8">
 
                                                 <div class="mb-3 row">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom01">Master User
+                                                    <label class="col-lg-4 col-form-label" for="main_user">Master User
                                                         <span class="text-danger">*</span>
                                                     </label>
                                                     <div class="col-lg-8">
-                                                        <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="main_user"  id="main_user">
-                                                            {!! $userOptions !!}
+                                                    @php
+                                                        $mUser = array($booking->main_user_id);
+                                                        $mainUser = getUserDetails($mUser);
+                                                        $userOptions = '<option value="'. $mainUser[0]->id .'" selected>'.$mainUser[0]->name.'-'.$mainUser[0]->profile_id.' ('.$mainUser[0]->email.')</option>';
+                                                    @endphp
+                                                        <select class="me-sm-2 form-control wide" style="width:100% !important;" name="main_user"  id="main_user">
+                                                            
                                                         </select>
                                                         @error('main_user')
                                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -48,41 +44,37 @@
                                                 </div>
 
                                                 @php   
-                                                    $addUsers = [];
+                                                    $addUsers = $additionUsers = [];
                                                     if(isset($booking->additional_users_without_main_user[0])){
                                                         $additionalUsers = $booking->additional_users_without_main_user;
                                                         foreach($additionalUsers as $add){
                                                             $addUsers[] = $add->user_id;
                                                         }
                                                     }
-                                                   
-                                                    $userAddOptions = '<option value="">Select User</option>'; 
+                                                   if(!empty($addUsers)){
+                                                        $additionUsers = getUserDetails($addUsers);
+                                                   }
+                                                   $userAddOptions = '';
                                                 @endphp
                                                
-                                                @foreach($users as $user)
+                                                @foreach($additionUsers as $user)
                                                     @php 
-                                                        $select = '';
-                                                        if(in_array($user->id , $addUsers)){
-                                                            $select = 'selected';
-                                                        }
-                                                       
-                                                        $userAddOptions .= '<option value="'. $user->id .'" '.$select.'>'.$user->name.' ('.$user->email.')</option>';
-                                                      
+                                                        $userAddOptions .= '<option value="'. $user->id .'" selected>'.$user->name.'-'.$user->profile_id.' ('.$user->email.')</option>';
                                                     @endphp
                                                 @endforeach
                                                
                                                 <div class="mb-3 row">
                                                     <input type="hidden" name="oldUser" value="{{ json_encode($addUsers) }}">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom01">Additional Users</label>
+                                                    <label class="col-lg-4 col-form-label" for="additional_users">Additional Users</label>
                                                     <div class="col-lg-8">
-                                                        <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="additional_users[]" multiple id="additional_users">
-                                                        {!! $userAddOptions !!}
+                                                        <select class="me-sm-2 form-control wide" style="width:100% !important;" name="additional_users[]" multiple id="additional_users">
+                                                        
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="mb-3 row">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Room Number <span
+                                                    <label class="col-lg-4 col-form-label" for="room_number">Room Number <span
                                                             class="text-danger">*</span>
                                                     </label>
                                                     <div class="col-lg-8">
@@ -94,7 +86,7 @@
                                                 </div>
 
                                                 <div class="mb-3 row form-material">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Access-In<span
+                                                    <label class="col-lg-4 col-form-label" for="check_in">Access-In<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control datetime" value="{{ old('check_in',$booking->checkin_date.' '.$booking->checkin_time) }}"  id="check_in" name="check_in" placeholder="YYYY-MM-DD HH:mm">
@@ -105,7 +97,7 @@
                                                 </div>
 
                                                 <div class="mb-3 row form-material">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Access-Out<span
+                                                    <label class="col-lg-4 col-form-label" for="check_out">Access-Out<span
                                                             class="text-danger">*</span></label>
                                                     <div class="col-lg-8">
                                                         <input type="text" class="form-control datetime" value="{{ old('check_out',$booking->checkout_date.' '.$booking->checkout_time) }}"  id="check_out" name="check_out" placeholder="YYYY-MM-DD HH:mm">
@@ -124,7 +116,7 @@
                                                     }
                                                 @endphp
                                                 <div class="mb-3 row">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom01">Other Facilities</label>
+                                                    <label class="col-lg-4 col-form-label" for="facilities">Other Facilities</label>
                                                     <div class="col-lg-8">
                                                         <input type="hidden" name="oldfac" value="{{ json_encode($addFac) }}">
                                                         <select class="me-sm-2 select2 select2-hidden-accessible form-control wide" style="width:100% !important;" name="facilities[]" multiple id="facilities">
@@ -174,8 +166,9 @@
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-material-datetimepicker.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
-    .select2 {
-        
+    .select2-selection--multiple{
+        overflow: hidden !important;
+        height: auto !important;
     }
 </style> 
 @endsection
@@ -188,6 +181,59 @@
     $('.select2').select2({
         'placeholder':'Select'
     });
+    $('#additional_users').select2({
+        minimumInputLength: 3,
+        width: 'inherit',
+        placeholder: 'Select a user by Name/Email/Profile ID',
+        multiple:true,
+        ajax: {
+            url: '{{ route("ajax-users") }}',
+            dataType: 'json',
+            delay: 250,
+            data: function(params){
+                return {
+                    q: params.term,
+                    main: $('#main_user').val()
+                };
+            },
+            processResults: function (data) {
+            return {
+                results:  $.map(data, function (item) {
+                    return {
+                        text: item.name+' - '+item.profile_id+' ('+item.email+')',
+                        id: item.id
+                    }
+                })
+            };
+            },
+            cache: true
+        }
+    });
+
+    $('#main_user').select2({
+        minimumInputLength: 3,
+        width: 'inherit',
+        placeholder: 'Select a user by Name/Email/Profile ID',
+        ajax: {
+            url: '{{ route("ajax-users") }}',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results:  $.map(data, function (item) {
+                    return {
+                        text: item.name+' - '+item.profile_id+' ('+item.email+')',
+                        id: item.id
+                    }
+                })
+            };
+            },
+            cache: true
+        }
+    });
+
+    $('#main_user').append('{!! $userOptions !!}').trigger('change');
+    $('#additional_users').append('{!! $userAddOptions !!}').trigger('change');
    
     $('#check_out').bootstrapMaterialDatePicker({
         weekStart: 0, format: 'YYYY-MM-DD HH:mm'

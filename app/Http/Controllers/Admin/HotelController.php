@@ -272,6 +272,8 @@ class HotelController extends Controller
        
         return  view('admin.hotels.bookings',compact('bookings','users','hotels','user_search','hotel_search','checkin_search','checkout_search'));
     }
+
+    
     
    
 }

@@ -14,7 +14,7 @@
 	<!-- PAGE TITLE HERE -->
 	<title>{{ env('APP_NAME') }} - @yield('title')</title>
 	<!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="images/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/admin-css.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
