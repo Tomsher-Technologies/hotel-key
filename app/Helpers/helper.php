@@ -73,4 +73,19 @@ function uniqueCodeNumberExists($code) {
 }
 
 
+function getUserDetails($users){
+    $query = User::select('users.*','ud.profile_id')
+                ->leftJoin('user_details as ud','users.id','=','ud.user_id')
+                ->where('user_type','user')
+                ->where('is_deleted',0)
+                ->where('is_active',1)
+                ->whereIn('users.id', $users);
+            
+    $data = $query->orderBy('users.name','ASC')->get();
+    // echo '<pre>';
+    // print_r($data);
+    // die;
+    return $data;
+}
+
 

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'All Access')
 @section('content')
 
 <div class="content-body">

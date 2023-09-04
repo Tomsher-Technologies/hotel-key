@@ -53,6 +53,19 @@
                         <span class="nav-text">Facilities</span>
                     </a>
                 </li>
+                <li class="{{ areActiveRoutes(['all-staffs','add-staff','edit-staff']) }}">
+                    <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
+                        <div class="menu-icon">
+                            <svg style="color: white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="white"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="white"></path><path d="M16 3.13a4 4 0 0 1 0 7.75" fill="white"></path></svg>
+                        </div>
+                        <span class="nav-text">Staffs</span>
+                    </a>
+                    <ul aria-expanded="false" class="mm-collapse" style="">
+                        <li class="mini-dashboard">All</li>
+                        <li><a href="{{ route('all-staffs') }}">All Staffs</a></li>
+                        <li><a href="{{ route('add-staff') }}">Add New Staff</a></li>
+                    </ul>
+                </li>
 
                 <li class="{{ areActiveRoutes(['profile','update-profile']) }}">
                     <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">

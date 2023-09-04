@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Add New User')
+@section('title', 'Create Staff')
 @section('content')
 
 <div class="content-body">
@@ -12,13 +12,13 @@
                         <div class="card">
                             <div class="card-header">
                                 <div>
-                                    <h3 class="card-title main-head">Add New User</h3>
+                                    <h3 class="card-title main-head">Add New Staff</h3>
                                 </div>
-                                <a href="{{ route('all-users') }}" class="btn btn-primary">Back</a>
+                                <a href="{{ route('all-staffs') }}" class="btn btn-primary">Back</a>
                             </div>
                             <div class="card-body">
                                 <div class="form-validation">
-                                    <form class="form-horizontal repeater" action="{{ route('store-user') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                                    <form class="form-horizontal repeater" action="{{ route('store-staff') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
                                             <div class="col-xl-7">
@@ -83,25 +83,6 @@
                                                 </div>
 
                                                 <div class="mb-3 row">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Gender</label>
-                                                    <div class="col-lg-8">
-                                                        <select class="me-sm-2 default-select form-control wide" name="gender" id="gender">
-                                                            <option value="">Select gender</option>
-                                                            <option {{ (old('gender') == 'male') ? 'selected' : '' }} value="male" >Male</option>
-                                                            <option {{ (old('gender') == 'female') ? 'selected' : '' }} value="female" >Female</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="mb-3 row form-material">
-                                                    <label class="col-lg-4 col-form-label" for="validationCustom02">Date Of Birth</label>
-                                                    <div class="col-lg-8">
-                                                        <input type="text" class="form-control" value="{{ old('dob') }}"  id="dob" name="dob" placeholder="YYYY-MM-DD">
-                                                       
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-3 row">
                                                     <label class="col-lg-4 col-form-label" for="validationCustom02">Profile Image </label>
                                                     <div class="col-lg-8">
                                                         <input type="file" class="form-control" id="profile_image" name="profile_image" >
@@ -111,7 +92,7 @@
                                                 <div class="mb-3 row">
                                                     <div class="col-lg-8 ms-auto">
                                                         <button type="submit" class="btn btn-primary light">Save</button>
-                                                        <a href="{{ route('all-users') }}" class="btn btn-danger light">Cancel</a>
+                                                        <a href="{{ route('all-staffs') }}" class="btn btn-danger light">Cancel</a>
                                                     </div>
                                                 </div>
                                             </div>

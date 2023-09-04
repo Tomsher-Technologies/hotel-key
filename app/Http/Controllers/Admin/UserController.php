@@ -186,6 +186,148 @@ class UserController extends Controller
         User::where('id', $request->id)->update(['is_deleted' => 1]);
     }
 
+    public function getAllStaffs(Request $request){
+        $search_term = '';
+
+        if ($request->has('search_term')) {
+            $search_term = $request->search_term;
+        }
+
+        $query = User::with('user_details')->select('*')
+                        ->where('user_type','staff')
+                        ->where('parent_id', Auth::user()->id)
+                        ->where('is_deleted',0)
+                        ->orderBy('id','DESC');
+        if($search_term){
+            $query->Where(function ($query) use ($search_term) {
+                $query->orWhere('users.name', 'LIKE', "%$search_term%")
+                ->orWhere('users.email', 'LIKE', "%$search_term%")
+                ->orWhereHas('user_details', function ($query)  use($search_term) {
+                    $query->where('profile_id', 'LIKE', "%$search_term%")
+                    ->orWhere('phone_number', 'LIKE', "%$search_term%");
+                });   
+            }); 
+            
+        }
+        $staffs = $query->paginate(10);
+        
+        return  view('admin.staffs.index',compact('staffs','search_term'));
+    }
    
-   
+    public function createStaff()
+    {
+        return view('admin.staffs.create');
+    }
+
+    public function storeStaff(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|string|email|max:100|unique:users',
+            'phone_number' => 'required',
+            'password' => 'required'
+        ]);
+        
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = new User;
+        $user->parent_id = Auth::user()->id;
+        $user->user_type = 'staff';
+        $user->name = $request->first_name.' '.$request->last_name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+        $userId = $user->id;
+
+        if($userId){
+            $profileImage = '';
+            if ($request->hasFile('profile_image')) {
+                $uploadedFile = $request->file('profile_image');
+                $filename =    strtolower(Str::random(2)).time().'.'. $uploadedFile->getClientOriginalName();
+                $name = Storage::disk('public')->putFileAs(
+                    'users/'.$userId,
+                    $uploadedFile,
+                    $filename
+                );
+               $profileImage = Storage::url($name);
+            } 
+            
+
+            $uDetails = new UserDetails();
+            $uDetails->user_id = $user->id;
+            $uDetails->first_name = $request->first_name;
+            $uDetails->last_name = $request->last_name;
+            $uDetails->phone_number = $request->phone_number;
+            $uDetails->language = 'en';
+            $uDetails->profile_image = $profileImage;
+            $uDetails->save();
+        }
+        flash('Staff has been created successfully')->success();
+        return redirect()->route('all-staffs');
+    }
+
+    public function editStaff(Request $request, $id)
+    {
+        $staff = User::with('user_details')->findOrFail($id);
+        
+        return view('admin.staffs.edit', compact('staff'));
+    }
+
+    public function updateStaff(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|string|email|max:100|unique:users,email,'.$id,
+            'phone_number' => 'required'
+        ]);
+        
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = User::with(['user_details'])->findOrFail($id);
+
+        $presentLogo = $user->user_details->profile_image;
+        $logo = '';
+        if ($request->hasFile('profile_image')) {
+            $uploadedFilel = $request->file('profile_image');
+            $filenamel =    strtolower(Str::random(2)).time().'.'. $uploadedFilel->getClientOriginalName();
+            $namel = Storage::disk('public')->putFileAs(
+                'users/'.$id,
+                $uploadedFilel,
+                $filenamel
+            );
+            $logo = Storage::url($namel);
+            if($presentLogo != '' && File::exists(public_path($presentLogo))){
+                unlink(public_path($presentLogo));
+            }
+        } 
+        $user->name = $request->first_name.' '.$request->last_name;
+        $user->email = $request->email;
+        if($request->password != ''){
+            $user->password = Hash::make($request->password);
+        }
+        $user->is_active = $request->is_active;
+        $user->save();
+        $userId = $user->id;
+       
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone_number' => $request->phone_number,
+            'profile_image' => ($logo != '') ? $logo : $presentLogo
+        ];
+        UserDetails::where('user_id', $userId)->update($data);
+
+        flash('Staff details has been updated successfully')->success();
+        return redirect()->route('all-staffs');
+    }
+
+    public function deleteStaff(Request $request){
+        User::where('id', $request->id)->update(['is_deleted' => 1]);
+    }
 }

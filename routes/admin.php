@@ -27,7 +27,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
         Route::get('/piechart-counts', [HomeController::class, 'pieChart'])->name('piechart-counts');
         Route::get('/monthChart-counts', [HomeController::class, 'monthChartCounts'])->name('monthChart-counts');
 
-      
+        Route::get('/ajax-users', [HomeController::class, 'usersAjax'])->name('ajax-users');
        
         Route::namespace('Admin')->prefix('hotel')->group(function () {
             Route::get('/all-bookings', [HomeController::class, 'getAllBookings'])->name('all-bookings');
@@ -44,6 +44,13 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::get('/profile', [HomeController::class, 'getProfile'])->name('profile');
             Route::get('/update-profile', [HomeController::class, 'updateProfile'])->name('update-profile');
             Route::post('/save-profile', [HomeController::class, 'saveProfile'])->name('save-profile');
+
+            Route::get('/all-staffs', [UserController::class, 'getAllStaffs'])->name('all-staffs');
+            Route::get('/add-staff', [UserController::class, 'createStaff'])->name('add-staff');
+            Route::post('/store-staff', [UserController::class, 'storeStaff'])->name('store-staff');
+            Route::get('/edit-staff/{id}', [UserController::class, 'editStaff'])->name('edit-staff');
+            Route::post('/staff/update/{id}', [UserController::class, 'updateStaff'])->name('staff.update');
+            Route::post('/staff/delete/', [UserController::class, 'deleteStaff'])->name('staff.delete');
 
             Route::get('/change-password', [HomeController::class, 'getProfile'])->name('change-password');
         });
@@ -64,6 +71,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::get('/edit-user/{id}', [UserController::class, 'editUser'])->name('edit-user');
             Route::post('/user/update/{id}', [UserController::class, 'updateUser'])->name('user.update');
             Route::post('/user/delete/', [UserController::class, 'deleteUser'])->name('user.delete');
+            
         });
     });
 
