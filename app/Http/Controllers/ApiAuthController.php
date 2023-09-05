@@ -17,6 +17,7 @@ use App\Models\Bookings;
 use App\Models\BookingAdditionalUsers;
 use App\Models\HotelBookings;
 use App\Models\Notifications;
+use App\Models\AdminNotifications;
 use Validator;
 use Hash;
 use Str;
@@ -427,6 +428,27 @@ class ApiAuthController extends Controller
         }else{
             return response()->json([ 'status' => false, 'message' => 'Hotels not found.', 'data' => []]);
         }  
+    }
+
+    public function saveSos(Request $request){
+        $booking_id = $request->booking_id;
+        $user_id = $request->user_id;
+
+        $book = HotelBookings::find($booking_id);
+        $room = $book->room_number;
+        $hotel = $book->hotel_id;
+
+        $not = new AdminNotifications;
+        $not->user_id = $hotel;
+        $not->type = 'sos';
+        $not->content = 'Emergency call from room number '.$room;
+        $not->created_at = date('Y-m-d H:i:s');
+        $not->save();
+        if($not->id){
+            return response()->json([ 'status' => true, 'message' => 'Success', 'data' => []]);
+        }else{
+            return response()->json([ 'status' => false, 'message' => 'Something went wrong.', 'data' => []]);
+        } 
     }
 
 }

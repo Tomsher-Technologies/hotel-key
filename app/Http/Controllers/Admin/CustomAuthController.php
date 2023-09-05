@@ -45,12 +45,14 @@ class CustomAuthController extends Controller
         $credentials = array('email' => $request->email, 'password' => $request->password);
         if (Auth::attempt($credentials)) {
             if(Auth::user()->user_type != "user" && Auth::user()->is_active == 1 && Auth::user()->is_deleted == 0){
-                return redirect()->route('admin.dashboard');
+                if(Auth::user()->user_type == "staff"){
+                    return redirect()->route('all-bookings');
+                }else{
+                    return redirect()->route('admin.dashboard');
+                }
             }else{
                 auth()->guard()->logout();
-       
                 $request->session()->invalidate();
-
                 $request->session()->regenerateToken();
                 return back()->withInput()->with('status', 'You are not allowed to access!');
             }

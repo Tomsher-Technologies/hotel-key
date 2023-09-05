@@ -18,6 +18,7 @@ use App\Models\HotelBookings;
 use App\Models\BookingAdditionalUsers;
 use App\Models\BookingFacilities;
 use App\Models\Notifications;
+use App\Models\AdminNotifications;
 use Auth;
 use Validator;
 use Storage;
@@ -173,13 +174,21 @@ class HomeController extends Controller
         if ($request->has('checkout')) {
             $checkout_search = $request->checkout;
         }
-
-        $query = HotelBookings::with(['main_user','additional_users_without_main_user','booking_facilities'])
+        if(Auth::user()->parent_id != ''){
+            $hotelId = Auth::user()->parent_id;
+            $userId = Auth::user()->id;
+        }else{
+            $hotelId = Auth::user()->id;
+            $userId = '';
+        }
+        // echo '$hotelId   ==== '.$hotelId;
+        // echo '<br>$userId   ==== '.$userId;die;
+        $query = HotelBookings::with(['main_user','accessBy','additional_users_without_main_user','booking_facilities'])
                             ->select('*')
-                            ->where('hotel_id', Auth::user()->id)
+                            ->where('hotel_id', $hotelId)
                             ->where('is_deleted',0)
                             ->orderBy('id','DESC');
-
+    
         if($search_term){
             $query->Where(function ($query) use ($search_term) {
                 $query->orWhere('hotel_bookings.room_number', 'LIKE', "%$search_term%");
@@ -219,7 +228,12 @@ class HomeController extends Controller
                         ->where('is_deleted',0)
                         ->where('is_active',1)
                         ->orderBy('name','ASC')->get();
-        $facilities = HotelFacilities::where('hotel_id', Auth::user()->id)
+        if(Auth::user()->parent_id != ''){
+            $hotelId = Auth::user()->parent_id;
+        }else{
+            $hotelId = Auth::user()->id;
+        }
+        $facilities = HotelFacilities::where('hotel_id', $hotelId)
                         ->where('is_deleted', 0)
                         ->where('is_active', 1)
                         ->orderBy('facility_name','ASC')
@@ -257,7 +271,8 @@ class HomeController extends Controller
         $checkoutTime = isset($checkout[1]) ? $checkout[1] : '';
 
         $book = new HotelBookings();
-        $book->hotel_id = Auth::user()->id;
+        $book->access_by = Auth::user()->id;
+        $book->hotel_id = (Auth::user()->parent_id != '') ? Auth::user()->parent_id : Auth::user()->id;
         $book->main_user_id = $request->main_user;
         $book->room_number = $request->room_number;
         $book->checkin_date = $checkinDate;
@@ -273,10 +288,16 @@ class HomeController extends Controller
             'is_main_user' => 1,
             'created_at' => date('Y-m-d H:i:s')
         );
+
+        if(Auth::user()->parent_id != ''){
+            $hotelName = getHotelName(Auth::user()->parent_id);
+        }else{
+            $hotelName = Auth::user()->name;
+        }
         $notifications[] = array(
             "user_id" => $request->main_user,
             'booking_id' => $bookId,
-            "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+            "content"=> 'Room number '.$request->room_number.' of '.$hotelName.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
             'created_at' => date('Y-m-d H:i:s')
         );
 
@@ -292,7 +313,7 @@ class HomeController extends Controller
                 $notifications[] = array(
                     "user_id" => $users,
                     'booking_id' => $bookId,
-                    "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+                    "content"=> 'Room number '.$request->room_number.' of '.$hotelName.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
                     'created_at' => date('Y-m-d H:i:s')
                 );
             }
@@ -320,8 +341,13 @@ class HomeController extends Controller
      */
     public function editBooking(Request $request, $id)
     {
+        if(Auth::user()->parent_id != ''){ 
+            $hotelId = Auth::user()->parent_id;
+        }else{
+            $hotelId = Auth::user()->id;
+        }
         $booking = HotelBookings::with(['main_user','additional_users_without_main_user','booking_facilities'])
-                                ->where('hotel_id', Auth::user()->id)
+                                ->where('hotel_id', $hotelId)
                                 ->where('is_deleted',0)
                                 ->find($id);
         $users = User::select('*')
@@ -329,7 +355,7 @@ class HomeController extends Controller
                         ->where('is_deleted',0)
                         ->where('is_active',1)
                         ->orderBy('name','ASC')->get();
-        $facilities = HotelFacilities::where('hotel_id', Auth::user()->id)
+        $facilities = HotelFacilities::where('hotel_id', $hotelId)
                         ->where('is_deleted', 0)
                         ->where('is_active', 1)
                         ->orderBy('facility_name','ASC')
@@ -373,12 +399,18 @@ class HomeController extends Controller
         $book = HotelBookings::find($id);
         $oldMainUser = $book->main_user_id;
 
+        if(Auth::user()->parent_id != ''){
+            $hotelName = getHotelName(Auth::user()->parent_id);
+        }else{
+            $hotelName = Auth::user()->name;
+        }
+
         $notifications = [];
         if($oldMainUser != $request->main_user){
             $notifications[] = array(
                 "user_id" => $request->main_user,
                 'booking_id' => $book->id,
-                "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+                "content"=> 'Room number '.$request->room_number.' of '.$hotelName.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
                 'created_at' => date('Y-m-d H:i:s')
             );
         }
@@ -414,7 +446,7 @@ class HomeController extends Controller
                     $notifications[] = array(
                         "user_id" => $users,
                         'booking_id' => $bookId,
-                        "content"=> 'Room number '.$request->room_number.' of '.Auth::user()->name.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
+                        "content"=> 'Room number '.$request->room_number.' of '.$hotelName.' has been assigned to you, and your check-out time is '.$checkoutTime.' on ' . date('d M, Y',strtotime($checkoutDate)),
                         'created_at' => date('Y-m-d H:i:s')
                     );
                 }   
@@ -445,6 +477,12 @@ class HomeController extends Controller
     public function deleteBooking(Request $request){
         HotelBookings::where('id', $request->id)->update(['is_deleted' => 1]);
         Notifications::where('booking_id', $request->id)->update(['is_deleted' => 1]);
+    }
+
+    public function statusChangeBooking(Request $request){
+        HotelBookings::where('id', $request->id)->update(['is_active' => $request->status]);
+        $msg = ($request->status == 1) ? 'enabled' : 'disabled';
+        return $msg;
     }
 
     public function getAllFacilities(){
@@ -590,5 +628,26 @@ class HomeController extends Controller
         }
         return response()->json($data);
     }
+
+    public function notifications(){
+        if(Auth::user()->parent_id != ''){
+            $userId = Auth::user()->parent_id;
+        }else{
+            $userId = Auth::user()->id;
+        }
+
+        $notifications = AdminNotifications::with(['attendedBy'])->where('user_id', $userId)->orderBy('id','desc')->paginate(15);
+        return view('admin.notifications', compact('notifications'));
+    }
    
+    public function acknowledged(Request $request){
+        $id = $request->id;
+        $attended = Auth::user()->id;
+
+        $not = AdminNotifications::find($id);
+        $not->is_read = 1;
+        $not->attended_by = $attended;
+        $not->attended_at = date('Y-m-d H:i:s');
+        $not->save();
+    }
 }

@@ -27,6 +27,9 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
         Route::get('/piechart-counts', [HomeController::class, 'pieChart'])->name('piechart-counts');
         Route::get('/monthChart-counts', [HomeController::class, 'monthChartCounts'])->name('monthChart-counts');
 
+        Route::get('/notifications', [HomeController::class, 'notifications'])->name('notifications');
+        Route::post('/notification.acknowledged', [HomeController::class, 'acknowledged'])->name('notification.acknowledged');
+
         Route::get('/ajax-users', [HomeController::class, 'usersAjax'])->name('ajax-users');
        
         Route::namespace('Admin')->prefix('hotel')->group(function () {
@@ -36,6 +39,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::get('/edit-booking/{id}', [HomeController::class, 'editBooking'])->name('edit-booking');
             Route::post('/booking/update/{id}', [HomeController::class, 'updateBooking'])->name('update-booking');
             Route::post('/booking/delete/', [HomeController::class, 'deleteBooking'])->name('booking.delete');
+            Route::post('/booking/status/', [HomeController::class, 'statusChangeBooking'])->name('booking.status');
 
             Route::get('/facilities', [HomeController::class, 'getAllFacilities'])->name('facilities');
             Route::post('/add-facility', [HomeController::class, 'storeFacility'])->name('add-facility');

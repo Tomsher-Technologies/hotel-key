@@ -18,7 +18,15 @@
 
                             </div>
 							 <div class="card-body">
-                                
+                                @php
+                                    if($user_search){
+                                        $mUser = array($user_search);
+                                        $mainUser = getUserDetails($mUser);
+                                        $userOptions = '<option value="'. $mainUser[0]->id .'" selected>'.$mainUser[0]->name.'-'.$mainUser[0]->profile_id.' ('.$mainUser[0]->email.')</option>';
+                                    }else{
+                                        $userOptions = '';
+                                    }
+                                @endphp
                                 <form  action="" method="GET">
                                     <div class="row search-section">
                                         <div class="mb-3 col-sm-3">
@@ -34,10 +42,7 @@
                                         <div class="mb-3 col-sm-3">
                                             <label class="form-label">User</label>
                                             <select class="me-sm-2 select2 form-control wide" style="width:100% !important;" name="user"  id="user">
-                                                <option value=""> Select </option>
-                                                @foreach($users as $user)
-                                                    <option {{ ($user_search == $user->id) ? 'selected' : '' }} value="{{$user->id}}">{{$user->name}}  ({{$user->email}})</option>
-                                                @endforeach
+                                               
                                             </select>
                                         </div>
                                         <div class="mb-3 col-sm-3">
@@ -113,6 +118,9 @@
                                             @endif
                                         </tbody>
                                     </table>
+                                    <div class="pagination">
+                                        {{ $bookings->appends(request()->input())->links() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -141,9 +149,30 @@
      $('#hotel').select2({
         'placeholder':'Select'
     });
+   
     $('#user').select2({
-        'placeholder':'Select'
+        minimumInputLength: 3,
+        width: 'inherit',
+        placeholder: 'Select a user by Name/Email/Profile ID',
+        ajax: {
+            url: '{{ route("ajax-users") }}',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+            return {
+                results:  $.map(data, function (item) {
+                    return {
+                        text: item.name+' - '+item.profile_id+' ('+item.email+')',
+                        id: item.id
+                    }
+                })
+            };
+            },
+            cache: true
+        }
     });
+    $('#user').append('{!! $userOptions !!}').trigger('change');
+
      $('#checkin').bootstrapMaterialDatePicker({
         weekStart: 0,
         time: false,
