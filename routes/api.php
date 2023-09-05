@@ -37,6 +37,8 @@ Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
     Route::get('/notifications', [ApiAuthController::class, 'notifications'])->name('notifications');
     Route::get('/notification-count', [ApiAuthController::class, 'unreadNotifications'])->name('notification-count');
     Route::get('/history', [ApiAuthController::class, 'getHistory'])->name('history');
+
+    Route::post('/sos', [ApiAuthController::class, 'saveSos'])->name('sos');
 });
 
 

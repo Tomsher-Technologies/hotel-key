@@ -20,6 +20,10 @@ class HotelBookings extends Model
     	return $this->belongsTo(User::class,'main_user_id','id');
     }
 
+    public function accessBy(){
+    	return $this->belongsTo(User::class,'access_by','id');
+    }
+
     public function additional_users_without_main_user()
     {
         return $this->hasMany(BookingAdditionalUsers::class,'booking_id','id')->with(['user'])->where('is_main_user',0);

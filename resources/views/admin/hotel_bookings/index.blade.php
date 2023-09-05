@@ -51,6 +51,7 @@
                                         <thead>
                                         <tr>
                                                 <th class="text-center text-secondary"><strong>Sl No.</strong></th>
+                                                <th class="text-secondary"><strong>Access By</strong></th>
                                                 <th class="text-secondary"><strong>Master User</strong></th>
                                                 <th class="text-center text-secondary"><strong>Room Number</strong></th>
                                                 <th class="text-center text-secondary"><strong>Access-In</strong></th>
@@ -65,6 +66,7 @@
                                                 @foreach($bookings as $key => $book)
                                                     <tr>
                                                         <td class="text-center">{{ $key + 1 + ($bookings->currentPage() - 1) * $bookings->perPage() }}</td>
+                                                        <td><strong>{{ $book->accessBy->name ?? '' }}</strong></td>
                                                         <td><strong>{{ $book->main_user->name ?? '' }}</strong></td>
                                                         <td class="text-center">
                                                             {{ $book->room_number }}
@@ -93,7 +95,12 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{ route('edit-booking',['id'=>$book->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1" title="Edit Access"><i class="fa fa-pencil"></i></a>
-                                                                <a href="#" class="btn btn-danger shadow btn-xs sharp deleteHotelBooking"  data-id="{{$book->id}}" title="Delete Access"><i class="fa fa-trash"></i></a>
+                                                                @if($book->is_active == 0)
+                                                                <a href="#" class="btn btn-danger shadow btn-xs statusBooking"  data-id="{{$book->id}}" data-status="1" title="Disabled"></i>Disabled</a>
+                                                                @else
+                                                                <a href="#" class="btn btn-success shadow btn-xs statusBooking"  data-id="{{$book->id}}" data-status="0" title="Enabled"></i>Enabled</a>
+                                                                @endif
+
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -105,6 +112,9 @@
                                             @endif
                                         </tbody>
                                     </table>
+                                    <div class="pagination">
+                                        {{ $bookings->appends(request()->input())->links() }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +133,13 @@
 @section('header')
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-material-datetimepicker.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+.statusBooking{
+    line-height: 11px !important;
+    padding: 0.438rem 0.5rem !important;
+    border-radius: 0.4rem !important;
+}
+</style>
 @endsection
 
 @section('footer')
@@ -138,35 +155,38 @@
         time: false,
         clearButton: true
     });
- $(document).on('click','.deleteHotelBooking',function(){
+ $(document).on('click','.statusBooking',function(){
         var id = $(this).attr('data-id');
+        var status = $(this).attr('data-status');
+        var msg = (status == 1) ? "enable ?" : "disable ?";
         swal({ 
-            title: "Are you sure to delete ?", 
+            title: "Are you sure to "+ msg, 
             text: "", 
             type: "warning", 
             showCancelButton: !0, 
             confirmButtonColor: "#DD6B55", 
-            confirmButtonText: "Yes, delete it !!", 
+            confirmButtonText: "Yes !!", 
             cancelButtonText: "No, cancel it !!", 
         }).then(function(result){
-            console.log(result);
+           
             if(result.value){
                 $.ajax({
-                    url: "{{ route('booking.delete') }}",
+                    url: "{{ route('booking.status') }}",
                     type: "POST",
                     data: {
                         id: id,
+                        status: status,
                         _token:'{{ @csrf_token() }}',
                     },
                     dataType: "html",
-                    success: function () {
-                        swal.fire("Done!", "Succesfully deleted!", "success");
+                    success: function (resp) {
+                        swal.fire("Done!", "Succesfully "+resp+"!", "success");
                         setTimeout(function () { 
                             window.location.reload();
                         }, 3000);  
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error deleting!", "Please try again", "error");
+                        swal.fire("Error!", "Please try again", "error");
                     }
                 });
             }

@@ -88,4 +88,9 @@ function getUserDetails($users){
     return $data;
 }
 
+function getHotelName($id){
+    $hotel = User::find($id);
+    return $hotel->name;
+}
+
 
