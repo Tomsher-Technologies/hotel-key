@@ -13,6 +13,7 @@ use App\Models\PackageModules;
 use App\Models\CourseClasses;
 use App\Models\TeacherDivisions;
 use App\Models\States;
+use App\Models\Tutorials;
 use Auth;
 use Validator;
 use Storage;
@@ -329,5 +330,96 @@ class UserController extends Controller
 
     public function deleteStaff(Request $request){
         User::where('id', $request->id)->update(['is_deleted' => 1]);
+    }
+
+    public function getAllTutorials()
+    {
+        $tutorials = Tutorials::orderBy('id','desc')->paginate(10);
+        return view('admin.tutorials.index', compact('tutorials'));
+    }
+
+    public function createTutorial(){
+        return view('admin.tutorials.create');
+    }
+
+    public function storeTutorial(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'link' => 'required'
+        ]);
+        
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $iconImage = '';
+        if ($request->hasFile('icon_image')) {
+            $uploadedFile = $request->file('icon_image');
+            $filename =    strtolower(Str::random(2)).time().'.'. $uploadedFile->getClientOriginalName();
+            $name = Storage::disk('public')->putFileAs(
+                'tutorials',
+                $uploadedFile,
+                $filename
+            );
+            $iconImage = Storage::url($name);
+        } 
+
+        $tut = new Tutorials;
+        $tut->title = $request->title;
+        $tut->link = $request->link;
+        $tut->image = $iconImage;
+        $tut->save();
+    
+        flash('Tutorial has been created successfully')->success();
+        return redirect()->route('all-tutorials');
+    }
+
+    public function editTutorial(Request $request, $id)
+    {
+        $tutorial = Tutorials::findOrFail($id);
+        
+        return view('admin.tutorials.edit', compact('tutorial'));
+    }
+
+    public function updateTutorial(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'link' => 'required'
+        ]);
+        
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $tutorial = Tutorials::find($id);
+
+        $presentImage = $tutorial->image;
+        $logo = '';
+        if ($request->hasFile('icon_image')) {
+            $uploadedFilel = $request->file('icon_image');
+            $filenamel =    strtolower(Str::random(2)).time().'.'. $uploadedFilel->getClientOriginalName();
+            $namel = Storage::disk('public')->putFileAs(
+                'tutorials',
+                $uploadedFilel,
+                $filenamel
+            );
+            $logo = Storage::url($namel);
+            if($presentImage != '' && File::exists(public_path($presentImage))){
+                unlink(public_path($presentImage));
+            }
+        } 
+        $tutorial->title = $request->title;
+        $tutorial->link = $request->link;
+        $tutorial->image = ($logo != '') ? $logo : $presentImage;
+        $tutorial->save();
+        
+        flash('Tutorial details has been updated successfully')->success();
+        return redirect()->route('all-tutorials');
+    }
+
+    public function deleteTutorial(Request $request){
+        Tutorials::where('id', $request->id)->delete();
     }
 }

@@ -19,6 +19,8 @@ use App\Models\BookingAdditionalUsers;
 use App\Models\BookingFacilities;
 use App\Models\Notifications;
 use App\Models\AdminNotifications;
+use App\Models\Supports;
+use App\Models\Tutorials;
 use Auth;
 use Validator;
 use Storage;
@@ -163,7 +165,7 @@ class HomeController extends Controller
 
 
     public function getAllBookings(Request $request){
-        $search_term = $checkin_search = $checkout_search = '';
+        $search_term = $checkin_search = $checkout_search = $status_search = $staff_search = '';
 
         if ($request->has('search_term')) {
             $search_term = $request->search_term;
@@ -174,6 +176,12 @@ class HomeController extends Controller
         if ($request->has('checkout')) {
             $checkout_search = $request->checkout;
         }
+        if ($request->has('staff_id')) {
+            $staff_search = $request->staff_id;
+        }
+        if ($request->has('status')) {
+            $status_search = $request->status;
+        }
         if(Auth::user()->parent_id != ''){
             $hotelId = Auth::user()->parent_id;
             $userId = Auth::user()->id;
@@ -183,11 +191,20 @@ class HomeController extends Controller
         }
         // echo '$hotelId   ==== '.$hotelId;
         // echo '<br>$userId   ==== '.$userId;die;
+        // DB::enableQueryLog();
         $query = HotelBookings::with(['main_user','accessBy','additional_users_without_main_user','booking_facilities'])
                             ->select('*')
-                            ->where('hotel_id', $hotelId)
-                            ->where('is_deleted',0)
-                            ->orderBy('id','DESC');
+                            ->where('hotel_bookings.hotel_id', $hotelId)
+                            ->where('hotel_bookings.is_deleted',0)
+                            ->orderBy('hotel_bookings.id','DESC');
+        
+        if($status_search != ''){
+            $query->where('hotel_bookings.is_active',$status_search);
+        }
+
+        if($staff_search){
+            $query->where('hotel_bookings.access_by',$staff_search);
+        }
     
         if($search_term){
             $query->Where(function ($query) use ($search_term) {
@@ -215,8 +232,20 @@ class HomeController extends Controller
         }
 
         $bookings = $query->paginate(10);
+    //    dd(DB::getQueryLog());
+        if(Auth::user()->parent_id != ''){
+            $hotelId = Auth::user()->parent_id;
+        }else{
+            $hotelId = Auth::user()->id;
+        }
        
-        return  view('admin.hotel_bookings.index',compact('bookings','search_term','checkin_search','checkout_search'));
+        $hotelStaffs =  User::select('*')
+                                ->where('user_type','staff')
+                                ->where('parent_id',$hotelId)
+                                ->where('is_deleted',0)
+                                ->orderBy('name','ASC')->get();
+                             
+        return  view('admin.hotel_bookings.index',compact('bookings','search_term','checkin_search','checkout_search','status_search','staff_search','hotelStaffs'));
     }
     /**
      * Show the form for creating a new resource.
@@ -629,15 +658,24 @@ class HomeController extends Controller
         return response()->json($data);
     }
 
-    public function notifications(){
+    public function notifications(Request $request){
         if(Auth::user()->parent_id != ''){
             $userId = Auth::user()->parent_id;
         }else{
             $userId = Auth::user()->id;
         }
+        $date_search = '';
+        if($request->has('date_search')){
+            $date_search = $request->date_search;
+        }
 
-        $notifications = AdminNotifications::with(['attendedBy'])->where('user_id', $userId)->orderBy('id','desc')->paginate(15);
-        return view('admin.notifications', compact('notifications'));
+        $query = AdminNotifications::with(['attendedBy'])->where('user_id', $userId)->orderBy('id','desc');
+        
+        if($date_search){
+            $query->whereDate('created_at', $date_search);
+        }
+        $notifications = $query->paginate(15);
+        return view('admin.notifications', compact('notifications','date_search'));
     }
    
     public function acknowledged(Request $request){
@@ -650,4 +688,76 @@ class HomeController extends Controller
         $not->attended_at = date('Y-m-d H:i:s');
         $not->save();
     }
+
+    public function checkNotifications(){
+        if(Auth::user()->parent_id != ''){
+            $userId = Auth::user()->parent_id;
+        }else{
+            $userId = Auth::user()->id;
+        }
+        $data = [];
+        $notifications = AdminNotifications::where('user_id', $userId)
+                                        ->where('is_read',0)
+                                        ->where('is_deleted',0)
+                                        ->orderBy('id','asc')
+                                        ->get();
+        if(isset($notifications[0])){
+            $data['msg'] = $notifications[0]->content;
+            $data['count'] = count($notifications);
+        }
+                                      
+        return json_encode($data);
+    }
+
+    public function support(){
+        if(Auth::user()->parent_id != ''){
+            $hotelId = Auth::user()->parent_id;
+        }else{
+            $hotelId = Auth::user()->id;
+        }
+        $query = Supports::where('is_deleted',0);
+
+        if(Auth::user()->user_type == 'hotel' || Auth::user()->user_type == 'staff'){
+            $query->where('hotel_id', $hotelId);
+        }
+
+        $supports = $query->orderBy('id','desc')->paginate(10);
+        Supports::where('is_read',0)->whereNotNull('reply')->where('hotel_id', $hotelId)->update(['is_read' => 1]);
+        return view('admin.support.index', compact('supports'));
+    }
+
+    public function storeSupport(Request $request){
+        $message = $request->message;
+        if(Auth::user()->parent_id != ''){
+            $hotelId = Auth::user()->parent_id;
+        }else{
+            $hotelId = Auth::user()->id;
+        }
+        $support = new Supports();
+        $support->hotel_id = $hotelId;
+        $support->message = $message;
+        $support->save();
+        $id = $support->id;
+        
+        return $id;
+    }
+
+    public function updateSupport(Request $request){
+        $reply = $request->reply;
+        $id = $request->id;
+        
+        $support = Supports::find($id);
+        $support->reply = $reply;
+        $support->reply_at = date('Y-m-d H:i:s');
+        $support->save();
+        $id = $support->id;
+        
+        return $id;
+    }
+    
+    public function getTutorials(){
+        $tutorials = Tutorials::where('is_active',1)->orderBy('id','desc')->paginate(12);
+        return view('admin.tutorials.list', compact('tutorials'));
+    }
+  
 }

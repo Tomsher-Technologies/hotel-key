@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/css/sweetalert2.min.css') }}">
     @yield('header')
+    
 </head>
 <body>
     <!--*******************
@@ -97,10 +98,42 @@
 	<script>
         $('div.alert').not('.alert-important').delay(5000).fadeOut(350);
 		$(document).ready(function(){
-        // $(".nav-item .open-cal").click(function(){
-		// 	$(".calendar-warpper").toggleClass("active");
-		//   });
+            // $(".nav-item .open-cal").click(function(){
+            // 	$(".calendar-warpper").toggleClass("active");
+            //   });
+
+           
 		});
+        window.setInterval(function(){
+            checkNotification()
+        }, 30000);
+
+        function checkNotification(){
+            $.ajax({
+                    url: "{{ route('notification.check') }}",
+                    type: "GET",
+                    dataType: "html",
+                    success: function (resp) {
+                        var response = JSON.parse(resp);
+                        if(response.length != 0 && response.count != 0){
+                            $('.not-badge').html(response.count);
+                            $('.not-badge').css('display','block');
+                            Swal.fire({
+                                title: "<span style='color:red;'>Alert!</span>",
+                                icon: '',
+                                position: 'bottom-end',
+                                showConfirmButton: false,
+                                showCloseButton: true,
+                                html:  "<h3 style='color:red;'>"+response.msg+"</h3>",
+                               
+                            });
+                        }else{
+                            $('.not-badge').css('display','none');
+                        }
+                    
+                    }
+                });
+        }
 	</script>
 	@yield('footer')
 	

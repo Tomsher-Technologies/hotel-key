@@ -104,3 +104,36 @@
 .w-90{
     width: 90% !important;
 }
+.w-7{
+    width: 7% !important;
+}
+
+.notify-icon .not-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 0px 4px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    font-size: 12px;
+}
+.cust-label{
+    font-weight: 500 !important;
+    color: #111828 !important;
+    font-size: 1rem !important;
+}
+.fw-500{
+    font-weight: 500 !important;
+}
+
+.support-icon .support-badge {
+    position: inherit;
+    top: -70px;
+    right: -25px;
+    padding: 0px 5px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    font-size: 14px;
+}

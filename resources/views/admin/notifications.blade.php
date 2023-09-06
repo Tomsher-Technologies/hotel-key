@@ -18,7 +18,22 @@
                               
                             </div>
 							 <div class="card-body">
-                            
+                             <form  action="" method="GET">
+                                    <div class="row search-section">
+                                        
+                                        <div class="mb-3 col-sm-4">
+                                            <label class="form-label">Notification Date</label>
+                                            <input type="text" class="form-control" value="{{ $date_search }}" id="date_search" name="date_search"
+                                            placeholder="YYYY-MM-DD" autocomplete="off">
+                                        </div>
+
+                                        <div class="mb-3 col-sm-3 margin-auto">
+                                            <button class="btn btn-primary light" type="submit">Search</button>
+                                            <a href="{{ route('notifications') }}" class="btn btn-danger light" type="button">Reset</a>
+                                        </div>
+                                    
+                                    </div>
+                                </form>
                                 <div class="table-responsive">
                                     
                                     <table class="table table-responsive-md">
@@ -77,17 +92,24 @@
 
 @endsection
 @section('header')
-
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-material-datetimepicker.css') }}">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 @endsection
 
 @section('footer')
+<script src="{{ asset('assets/js/bootstrap-material-datetimepicker.js') }}"></script>
 <script type="text/javascript">
+    $('#date_search').bootstrapMaterialDatePicker({
+        weekStart: 0,
+        time: false,
+        clearButton: true
+    });
     $(document).on('click','.acknowledged',function(){
         var id = $(this).attr('data-id');
-        swal({ 
+        Swal.fire({
             title: "Are you sure?", 
             text: "", 
-            type: "warning", 
+            icon: "warning", 
             showCancelButton: !0, 
             confirmButtonColor: "#DD6B55", 
             confirmButtonText: "Yes !!", 
@@ -107,7 +129,7 @@
                         window.location.reload();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error!", "Please try again", "error");
+                        Swal.fire("Error!", "Please try again", "error");
                     }
                 });
             }
@@ -153,14 +175,14 @@
                 dataType: "html",
                 success: function (resp) {
                     if(resp != ''){
-                        swal.fire("Done!", "Succesfully saved!", "success");
+                        Swal.fire("Done!", "Succesfully saved!", "success");
                         $('#addFacilityForm')[0].reset();
                         setTimeout(function () { 
                             $('#addFacility').modal('hide');
                             window.location.reload();
                         }, 2000);
                     }else{
-                        swal.fire("Failed!", "Something went wrong!", "error");
+                        Swal.fire("Failed!", "Something went wrong!", "error");
                     }
                 }
             });

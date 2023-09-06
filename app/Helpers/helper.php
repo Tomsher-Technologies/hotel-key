@@ -3,6 +3,8 @@
 use Carbon\Carbon;
 use App\Models\UserDetails;
 use App\Models\User;
+use App\Models\AdminNotifications;
+use App\Models\Supports;
 
 /**
  * Write code on Method
@@ -93,4 +95,37 @@ function getHotelName($id){
     return $hotel->name;
 }
 
+
+ function notificationsCount(){
+    if(Auth::user()->parent_id != ''){
+        $userId = Auth::user()->parent_id;
+    }else{
+        $userId = Auth::user()->id;
+    }
+    $msg = '';
+
+    $notifications = AdminNotifications::where('user_id', $userId)
+                                    ->where('is_read',0)
+                                    ->where('is_deleted',0)
+                                    ->orderBy('id','asc')
+                                    ->count();
+                          
+    return $notifications;
+}
+
+function supportsCount(){
+    if(Auth::user()->parent_id != ''){
+        $hotelId = Auth::user()->parent_id;
+    }else{
+        $hotelId = Auth::user()->id;
+    }
+   
+    if(Auth::user()->user_type == 'hotel' || Auth::user()->user_type == 'staff'){
+        $support = Supports::where('is_deleted',0)->where('is_read',0)->whereNotNull('reply')->where('hotel_id', $hotelId)->count();
+    }else{
+        $support = Supports::where('is_deleted',0)->whereNull('reply')->count();
+    }
+        
+    return $support;
+}
 

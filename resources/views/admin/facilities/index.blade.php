@@ -144,10 +144,10 @@
 <script type="text/javascript">
     $(document).on('click','.deleteFacility',function(){
         var id = $(this).attr('data-id');
-        swal({ 
+        Swal.fire({ 
             title: "Are you sure to delete ?", 
             text: "", 
-            type: "warning", 
+            icon: "warning", 
             showCancelButton: !0, 
             confirmButtonColor: "#DD6B55", 
             confirmButtonText: "Yes, delete it !!", 
@@ -164,13 +164,13 @@
                     },
                     dataType: "html",
                     success: function () {
-                        swal.fire("Done!", "Succesfully deleted!", "success");
+                        Swal.fire("Done!", "Succesfully deleted!", "success");
                         setTimeout(function () { 
                             window.location.reload();
                         }, 3000);  
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error deleting!", "Please try again", "error");
+                        Swal.fire("Error deleting!", "Please try again", "error");
                     }
                 });
             }
@@ -216,14 +216,14 @@
                 dataType: "html",
                 success: function (resp) {
                     if(resp != ''){
-                        swal.fire("Done!", "Succesfully saved!", "success");
+                        Swal.fire("Done!", "Succesfully saved!", "success");
                         $('#addFacilityForm')[0].reset();
                         setTimeout(function () { 
                             $('#addFacility').modal('hide');
                             window.location.reload();
                         }, 2000);
                     }else{
-                        swal.fire("Failed!", "Something went wrong!", "error");
+                        Swal.fire("Failed!", "Something went wrong!", "error");
                     }
                 }
             });

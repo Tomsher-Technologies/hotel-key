@@ -37,6 +37,26 @@
                                             <input type="text" class="form-control" value="{{ $checkout_search }}" id="checkout" name="checkout"
                                             placeholder="YYYY-MM-DD" autocomplete="off">
                                         </div>
+
+
+                                        <div class="mb-3 col-sm-3">
+                                            <label class="form-label">Staff</label>
+                                            <select class="form-control"  id="staff_id" name="staff_id" >
+                                                <option value=""> Select status</option>
+                                                @foreach($hotelStaffs as $staffs)
+                                                    <option @if($staff_search == $staffs->id) selected @endif value="{{ $staffs->id }}">{{ $staffs->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3 col-sm-3">
+                                            <label class="form-label">Status</label>
+                                            <select class="form-control"  id="status" name="status" >
+                                                <option value=""> Select status</option>
+                                                <option value="1" @if($status_search == '1') selected @endif> Enabled</option>
+                                                <option value="0" @if($status_search == '0') selected @endif> Disabled</option>
+                                            </select>
+                                        </div>
                                         <div class="mb-3 col-sm-3 margin-auto">
                                             <button class="btn btn-primary light" type="submit">Search</button>
                                             <a href="{{ route('all-bookings') }}" class="btn btn-danger light" type="button">Reset</a>
@@ -159,10 +179,10 @@
         var id = $(this).attr('data-id');
         var status = $(this).attr('data-status');
         var msg = (status == 1) ? "enable ?" : "disable ?";
-        swal({ 
+        Swal.fire({ 
             title: "Are you sure to "+ msg, 
             text: "", 
-            type: "warning", 
+            icon: "warning", 
             showCancelButton: !0, 
             confirmButtonColor: "#DD6B55", 
             confirmButtonText: "Yes !!", 
@@ -180,13 +200,13 @@
                     },
                     dataType: "html",
                     success: function (resp) {
-                        swal.fire("Done!", "Succesfully "+resp+"!", "success");
+                        Swal.fire("Done!", "Succesfully "+resp+"!", "success");
                         setTimeout(function () { 
                             window.location.reload();
                         }, 3000);  
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error!", "Please try again", "error");
+                        Swal.fire("Error!", "Please try again", "error");
                     }
                 });
             }

@@ -117,10 +117,10 @@
 <script type="text/javascript">
     $(document).on('click','.deleteStaff',function(){
         var id = $(this).attr('data-id');
-        swal({ 
+        Swal.fire({
             title: "Are you sure to delete ?", 
             text: "", 
-            type: "warning", 
+            icon: "warning", 
             showCancelButton: !0, 
             confirmButtonColor: "#DD6B55", 
             confirmButtonText: "Yes, delete it !!", 
@@ -137,13 +137,13 @@
                     },
                     dataType: "html",
                     success: function () {
-                        swal.fire("Done!", "Succesfully deleted!", "success");
+                        Swal.fire("Done!", "Succesfully deleted!", "success");
                         setTimeout(function () { 
                             window.location.reload();
                         }, 3000);  
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        swal.fire("Error deleting!", "Please try again", "error");
+                        Swal.fire("Error deleting!", "Please try again", "error");
                     }
                 });
             }
