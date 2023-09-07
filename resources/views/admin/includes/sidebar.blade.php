@@ -92,6 +92,43 @@
                         </ul>
                     </li>
                 @endif
+                <li class="{{ areActiveRoutes(['tutorials']) }} ">
+                    <a href="{{ route('tutorials') }}" class="" aria-expanded="false">
+                        <div class="menu-icon ">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.9026 8.85156L13.4593 12.4646C12.6198 13.1306 11.4387 13.1306 10.5992 12.4646L6.11841 8.85156" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9089 21C19.9502 21.0084 22 18.5095 22 15.4384V8.57001C22 5.49883 19.9502 3 16.9089 3H7.09114C4.04979 3 2 5.49883 2 8.57001V15.4384C2 18.5095 4.04979 21.0084 7.09114 21H16.9089Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          
+                        </div>	
+                        <span class="nav-text">Tutorials</span>
+                        
+                    </a>
+                </li>
+            @endif
+
+            @if(Auth::user()->user_type == 'hotel' || Auth::user()->user_type == 'admin')
+                <li class="{{ areActiveRoutes(['support']) }} support-icon">
+                    <a href="{{ route('support') }}" class="" aria-expanded="false">
+                        <div class="menu-icon support-icon">
+                            <div class=" ">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.9026 8.85156L13.4593 12.4646C12.6198 13.1306 11.4387 13.1306 10.5992 12.4646L6.11841 8.85156" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9089 21C19.9502 21.0084 22 18.5095 22 15.4384V8.57001C22 5.49883 19.9502 3 16.9089 3H7.09114C4.04979 3 2 5.49883 2 8.57001V15.4384C2 18.5095 4.04979 21.0084 7.09114 21H16.9089Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            
+                            </div>	
+                            @php
+                                $supportCount = supportsCount();
+                            @endphp
+                            @if($supportCount != 0)
+                                <span class="support-badge" > {{ $supportCount }} </span>
+                            @endif
+                        </div>	
+                        <span class="nav-text">Support</span>
+                        
+                    </a>
+                </li>
             @endif
 
             @if(Auth::user()->user_type == 'admin')
@@ -142,6 +179,20 @@
                         <li><a href="{{ route('all-users') }}">All Users</a></li>
                         <li><a href="{{ route('add-user') }}">Add New User</a></li>
                     </ul>
+                </li>
+
+                <li class="{{ areActiveRoutes(['all-tutorials']) }} ">
+                    <a href="{{ route('all-tutorials') }}" class="" aria-expanded="false">
+                        <div class="menu-icon ">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.9026 8.85156L13.4593 12.4646C12.6198 13.1306 11.4387 13.1306 10.5992 12.4646L6.11841 8.85156" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9089 21C19.9502 21.0084 22 18.5095 22 15.4384V8.57001C22 5.49883 19.9502 3 16.9089 3H7.09114C4.04979 3 2 5.49883 2 8.57001V15.4384C2 18.5095 4.04979 21.0084 7.09114 21H16.9089Z" stroke="#130F26" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                          
+                        </div>	
+                        <span class="nav-text">Tutorials</span>
+                        
+                    </a>
                 </li>
             @endif
 

@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
 
         Route::get('/notifications', [HomeController::class, 'notifications'])->name('notifications');
         Route::post('/notification.acknowledged', [HomeController::class, 'acknowledged'])->name('notification.acknowledged');
-
+        Route::get('/notification.check', [HomeController::class, 'checkNotifications'])->name('notification.check');
         Route::get('/ajax-users', [HomeController::class, 'usersAjax'])->name('ajax-users');
        
         Route::namespace('Admin')->prefix('hotel')->group(function () {
@@ -57,6 +57,12 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::post('/staff/delete/', [UserController::class, 'deleteStaff'])->name('staff.delete');
 
             Route::get('/change-password', [HomeController::class, 'getProfile'])->name('change-password');
+
+            Route::get('/support', [HomeController::class, 'support'])->name('support');
+            Route::post('/add-support', [HomeController::class, 'storeSupport'])->name('add-support');
+            Route::post('/update-support', [HomeController::class, 'updateSupport'])->name('update-support');
+
+            Route::get('/tutorials', [HomeController::class, 'getTutorials'])->name('tutorials');
         });
 
         Route::namespace('Admin')->prefix('admin')->group(function () {
@@ -75,7 +81,13 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::get('/edit-user/{id}', [UserController::class, 'editUser'])->name('edit-user');
             Route::post('/user/update/{id}', [UserController::class, 'updateUser'])->name('user.update');
             Route::post('/user/delete/', [UserController::class, 'deleteUser'])->name('user.delete');
-            
+
+            Route::get('/all-tutorials', [UserController::class, 'getAllTutorials'])->name('all-tutorials');
+            Route::get('/add-tutorial', [UserController::class, 'createTutorial'])->name('add-tutorial');
+            Route::post('/store-tutorial', [UserController::class, 'storeTutorial'])->name('store-tutorial');
+            Route::get('/edit-tutorial/{id}', [UserController::class, 'editTutorial'])->name('edit-tutorial');
+            Route::post('/tutorial/update/{id}', [UserController::class, 'updateTutorial'])->name('tutorial.update');
+            Route::post('/tutorial/delete/', [UserController::class, 'deleteTutorial'])->name('tutorial.delete');
         });
     });
 
