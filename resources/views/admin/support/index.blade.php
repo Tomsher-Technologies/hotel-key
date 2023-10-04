@@ -56,7 +56,7 @@
                                                                 @if(Auth::user()->user_type != 'admin' && $sup->is_read == 0)
                                                                     <span class="badge rounded-pill bg-success">New</span>
                                                                 @endif
-                                                                <span class="fw-500 text-danger">{{ date('Y-m-d H:i a', strtotime($sup->created_at)) }} </span>
+                                                                <span class="fw-500 text-danger">{{ date('Y-m-d H:i a', strtotime($sup->reply_at)) }} </span>
                                                             </div>
                                                         @endif
                                                     </td>
