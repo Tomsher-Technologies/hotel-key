@@ -306,7 +306,7 @@ class ApiAuthController extends Controller
         $query = BookingAdditionalUsers::with(['hotel_booking'])->where('user_id', $user_id);
         $query->whereHas('hotel_booking', function ($query) use($startDate, $endDate){
             $query->where('is_deleted', 0)
-            ->where('checkout_date','>=',date('Y-m-d'))->where('checkout_time','>=',date('H:i'));
+            ->where('checkout_date','>=',date('Y-m-d'))->where('checkout_time','<=',date('H:i'));
             if($startDate != '' && $endDate != ''){
                 $query->whereDate('checkin_date', '>=', $startDate)
                 ->whereDate('checkin_date', '<=', $endDate);

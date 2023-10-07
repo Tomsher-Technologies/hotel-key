@@ -232,7 +232,7 @@ class HomeController extends Controller
         }
 
         $bookings = $query->paginate(10);
-    //    dd(DB::getQueryLog());
+
         if(Auth::user()->parent_id != ''){
             $hotelId = Auth::user()->parent_id;
         }else{
