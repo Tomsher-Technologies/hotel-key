@@ -91,8 +91,12 @@
                                                         <td class="text-center">
                                                             {{ $book->room_number }}
                                                         </td>
-                                                        <td class="text-center">{{ $book->checkin_date }} {{ $book->checkin_time }}</td>
-                                                        <td class="text-center">{{ $book->checkout_date }} {{ $book->checkout_time }}</td>
+                                                        <td class="text-center">
+                                                            {{ date('d M, Y  h:i a', strtotime($book->checkin_date.' '.$book->checkin_time)) }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ date('d M, Y  h:i a', strtotime($book->checkout_date.' '.$book->checkout_time)) }}
+                                                        </td>
                                                         <td>
                                                             @if(isset($book->additional_users_without_main_user[0]))
                                                                 <ul class="list-icons">
@@ -116,11 +120,11 @@
                                                             <div class="d-flex">
                                                                 <a href="{{ route('edit-booking',['id'=>$book->id]) }}" class="btn btn-primary light shadow btn-xs sharp me-1" title="Edit Access"><i class="fa fa-pencil"></i></a>
                                                                 @if($book->is_active == 0)
-                                                                <a href="#" class="btn btn-danger shadow btn-xs statusBooking"  data-id="{{$book->id}}" data-status="1" title="Disabled"></i>Disabled</a>
+                                                                <a href="#" class="btn btn-danger shadow btn-xs buttonStyle statusBooking"  data-id="{{$book->id}}" data-status="1" title="Disabled"></i>Disabled</a>
                                                                 @else
-                                                                <a href="#" class="btn btn-success shadow btn-xs statusBooking"  data-id="{{$book->id}}" data-status="0" title="Enabled"></i>Enabled</a>
+                                                                <a href="#" class="btn btn-success shadow btn-xs statusBooking buttonStyle"  data-id="{{$book->id}}" data-status="0" title="Enabled"></i>Enabled</a>
                                                                 @endif
-
+                                                                <a href="{{ route('timeline',['id'=>$book->id]) }}" class="btn btn-info light shadow btn-xs buttonStyle" title="Access History">History</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -154,10 +158,11 @@
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-material-datetimepicker.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
-.statusBooking{
+.buttonStyle{
     line-height: 11px !important;
     padding: 0.438rem 0.5rem !important;
     border-radius: 0.4rem !important;
+    margin-left : 5px !important;
 }
 </style>
 @endsection

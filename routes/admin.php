@@ -41,6 +41,8 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
             Route::post('/booking/delete/', [HomeController::class, 'deleteBooking'])->name('booking.delete');
             Route::post('/booking/status/', [HomeController::class, 'statusChangeBooking'])->name('booking.status');
 
+            Route::get('/timeline/{id}', [HomeController::class, 'getAccessTimeline'])->name('timeline');
+
             Route::get('/facilities', [HomeController::class, 'getAllFacilities'])->name('facilities');
             Route::post('/add-facility', [HomeController::class, 'storeFacility'])->name('add-facility');
             Route::post('/facility/delete/', [HomeController::class, 'deleteFacility'])->name('facility.delete');
