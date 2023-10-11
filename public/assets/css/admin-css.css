@@ -107,6 +107,9 @@
 .w-7{
     width: 7% !important;
 }
+.font-13{
+    font-size: 13px !important;
+}
 
 .notify-icon .not-badge {
     position: absolute;

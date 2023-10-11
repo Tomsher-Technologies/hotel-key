@@ -759,5 +759,17 @@ class HomeController extends Controller
         $tutorials = Tutorials::where('is_active',1)->orderBy('id','desc')->paginate(12);
         return view('admin.tutorials.list', compact('tutorials'));
     }
+
+    public function getAccessTimeline(Request $request){
+        $access = HotelBookings::with(['main_user','accessBy','additional_users_without_main_user','booking_facilities'])
+                            ->select(DB::raw('*,TIMESTAMP(`checkout_date`,`checkout_time`) as checkout, TIMESTAMP(`checkin_date`,`checkin_time`) as checkin'))
+                            ->where('id', $request->id)
+                            ->where('is_deleted',0)
+                            ->first();
+        // echo '<pre>';
+        // print_r($access);
+        // die;
+        return view('admin.hotel_bookings.timeline',compact('access'));
+    }
   
 }
