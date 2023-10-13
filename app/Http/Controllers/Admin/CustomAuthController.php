@@ -17,6 +17,13 @@ class CustomAuthController extends Controller
 
     public function index()
     {
+        if(Auth::check()){
+            if(Auth::user()->user_type == "staff"){
+                return redirect()->route('all-bookings');
+            }else{
+                return redirect()->route('admin.dashboard');
+            }
+        }
         return view('admin.auth.login');
     }  
     private function validator(Request $request)
