@@ -41,9 +41,10 @@ class CustomAuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-   
+        $remember_me = $request->has('remember_me') ? true : false; 
+
         $credentials = array('email' => $request->email, 'password' => $request->password);
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember_me)) {
             if(Auth::user()->user_type != "user" && Auth::user()->is_active == 1 && Auth::user()->is_deleted == 0){
                 if(Auth::user()->user_type == "staff"){
                     return redirect()->route('all-bookings');
